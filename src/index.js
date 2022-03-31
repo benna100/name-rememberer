@@ -1,32 +1,46 @@
-import img from "./assets/images/interactive-hand.png";
-
-var DIR = "img/soft-scraps-icons/";
-
-var nodes = null;
-var edges = null;
-var network = null;
+document.querySelector("button").addEventListener("click", () => {
+    checkAndGetData(input.value);
+});
 
 const input = document.querySelector("input");
-document.querySelector("button").addEventListener("click", () => {
+if (localStorage.password) {
+    checkAndGetData(localStorage.password);
+    document.querySelector("input").remove();
+    document.querySelector("button").remove();
+}
+
+function checkAndGetData(password) {
     const url_local =
         "http://localhost:5001/name-rememberer-8ed08/us-central1/addMessage";
     const url_prod =
-        "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/addMessag";
+        "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/addMessage";
     fetch(url_prod, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: input.value }),
+        body: JSON.stringify({ password }),
     })
         .then((resp) => resp.json())
         .then((resp) => {
-            if (resp.successful) {
-                draw(resp.data);
+            if (!resp.successful) {
+                return alert("wrong password");
             }
+            localStorage.password = password;
+            draw(resp.data);
         });
-});
+}
 
 // Called when the Visualization API is loaded.
 function draw({ edges, nodes }) {
+    nodes = nodes.map(({ image, id, label }) => {
+        const obj = {
+            id,
+            image,
+            label,
+            shape: image !== "" ? "image" : "box",
+        };
+        return obj;
+    });
+
     // create people.
     // value corresponds with the age of the person
     var DIR = "../img/indonesia/";
@@ -57,5 +71,5 @@ function draw({ edges, nodes }) {
             color: "lightgray",
         },
     };
-    network = new vis.Network(container, data, options);
+    new vis.Network(container, data, options);
 }
