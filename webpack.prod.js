@@ -10,7 +10,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const buildPath = path.resolve(__dirname, "dist");
 
 const appUrl = "https://hvorlangtervi.dk";
-const appTitle = "Hvor langt er Danmark med Covid-19 vaccinationerne?";
+const appTitle = "Easier remember names";
 const appDescription = "Få et hurtigt overblik. Det er nemt og simpelt!";
 
 const CnameWebpackPlugin = require("cname-webpack-plugin");
