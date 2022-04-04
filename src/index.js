@@ -15,7 +15,6 @@ function checkAndGetData(password) {
         : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/addMessage";
     fetch(login_url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
     })
         .then((resp) => resp.json())

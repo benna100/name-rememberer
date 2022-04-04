@@ -11,7 +11,7 @@ const buildPath = path.resolve(__dirname, "dist");
 
 const appUrl = "https://hvorlangtervi.dk";
 const appTitle = "Easier remember names";
-const appDescription = "Få et hurtigt overblik. Det er nemt og simpelt!";
+const appDescription = "Få et godt overblik over dit netværk";
 
 const CnameWebpackPlugin = require("cname-webpack-plugin");
 
@@ -133,9 +133,6 @@ module.exports = {
                 "twitter:description": appDescription,
                 "twitter:image": "./src/assets/social-twitter.png",
             },
-        }),
-        new CnameWebpackPlugin({
-            domain: "hvorlangtervi.dk",
         }),
     ],
 };
