@@ -1,6 +1,7 @@
 document.querySelector("button").addEventListener("click", () => {
     checkAndGetData(input.value);
 });
+const loading = document.querySelector("span.loading");
 
 const input = document.querySelector("input");
 if (localStorage.password) {
@@ -24,6 +25,9 @@ function checkAndGetData(password) {
             }
             localStorage.password = password;
             draw(resp.data);
+        })
+        .catch(() => {
+            alert("Fetching data failed");
         });
 }
 
@@ -69,5 +73,9 @@ function draw({ edges, nodes }) {
             color: "lightgray",
         },
     };
-    new vis.Network(container, data, options);
+    const network = new vis.Network(container, data, options);
+
+    network.on("afterDrawing", () => {
+        loading.style.display = "none";
+    });
 }
