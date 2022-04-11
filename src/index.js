@@ -33,12 +33,13 @@ function checkAndGetData(password) {
 
 // Called when the Visualization API is loaded.
 function draw({ edges, nodes }) {
-    nodes = nodes.map(({ image, id, label }) => {
+    nodes = nodes.map(({ image, id, label, color }) => {
         const obj = {
             id,
             image,
             label,
             shape: image !== "" ? "image" : "box",
+            color,
         };
         return obj;
     });
@@ -71,6 +72,9 @@ function draw({ edges, nodes }) {
         },
         edges: {
             color: "lightgray",
+        },
+        layout: {
+            improvedLayout: false,
         },
     };
     const network = new vis.Network(container, data, options);
