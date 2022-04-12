@@ -4,17 +4,26 @@ document.querySelector("button").addEventListener("click", () => {
 const loading = document.querySelector("span.loading");
 
 const input = document.querySelector("input");
+
+const login_url_base = window.location.host.includes("localhost")
+    ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app"
+    : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/app";
 if (localStorage.password) {
     checkAndGetData(localStorage.password);
     document.querySelector("input").remove();
     document.querySelector("button").remove();
 }
 
+function populateSelectList(nodes) {
+    const select = document.querySelector("select");
+    const optionHtmlString = nodes
+        .map((node) => `<option value="${node.id}">${node.label}</option>`)
+        .join("");
+    select.innerHTML = optionHtmlString;
+}
+
 function checkAndGetData(password) {
-    const login_url = window.location.host.includes("localhost")
-        ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app/data"
-        : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/app/data";
-    fetch(login_url, {
+    fetch(`${login_url_base}/data`, {
         method: "POST",
         body: JSON.stringify({ password }),
     })
@@ -25,6 +34,7 @@ function checkAndGetData(password) {
             }
             localStorage.password = password;
             draw(resp.data);
+            populateSelectList(resp.data.nodes);
         })
         .catch(() => {
             alert("Fetching data failed");
@@ -33,6 +43,7 @@ function checkAndGetData(password) {
 
 // Called when the Visualization API is loaded.
 function draw({ edges, nodes }) {
+    console.log(nodes);
     nodes = nodes.map(({ image, id, label, color }) => {
         const obj = {
             id,
@@ -40,6 +51,10 @@ function draw({ edges, nodes }) {
             label,
             shape: image !== "" ? "image" : "box",
         };
+        if (color !== "") {
+            obj.color = color;
+        }
+        console.log(obj);
         return obj;
     });
 
@@ -82,3 +97,37 @@ function draw({ edges, nodes }) {
         loading.style.display = "none";
     });
 }
+
+document
+    .querySelector("button.create-new-node")
+    .addEventListener("click", () => {
+        const label = document.querySelector(".add-node .label").value;
+        const color = document.querySelector(".add-node .color").value;
+        const image = document.querySelector(".add-node .image").value;
+        const connectedToId = document.querySelector(
+            ".add-node .connected-to"
+        ).value;
+        const connectionLabel = document.querySelector(
+            ".add-node .connection-label"
+        ).value;
+
+        fetch(`${login_url_base}/node`, {
+            method: "POST",
+            body: JSON.stringify({
+                label,
+                image,
+                firebaseUid: "asd",
+                color,
+                connectedToId,
+                connectionLabel,
+                password: localStorage.password,
+            }),
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+                console.log(resp);
+            })
+            .catch(() => {
+                alert("Fetching data failed");
+            });
+    });
