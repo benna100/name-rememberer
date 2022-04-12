@@ -12,8 +12,8 @@ if (localStorage.password) {
 
 function checkAndGetData(password) {
     const login_url = window.location.host.includes("localhost")
-        ? "http://localhost:5001/name-rememberer-8ed08/us-central1/addMessage"
-        : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/addMessage";
+        ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app/data"
+        : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/app/data";
     fetch(login_url, {
         method: "POST",
         body: JSON.stringify({ password }),
@@ -39,7 +39,6 @@ function draw({ edges, nodes }) {
             image,
             label,
             shape: image !== "" ? "image" : "box",
-            color,
         };
         return obj;
     });
