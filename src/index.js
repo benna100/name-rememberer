@@ -43,7 +43,6 @@ function checkAndGetData(password) {
 
 // Called when the Visualization API is loaded.
 function draw({ edges, nodes }) {
-    console.log(nodes);
     nodes = nodes.map(({ image, id, label, color }) => {
         const obj = {
             id,
@@ -54,7 +53,7 @@ function draw({ edges, nodes }) {
         if (color !== "") {
             obj.color = color;
         }
-        console.log(obj);
+
         return obj;
     });
 
