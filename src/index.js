@@ -20,11 +20,13 @@ if (localStorage.password) {
 }
 
 function populateSelectList(nodes) {
-    const select = document.querySelector("select");
-    const optionHtmlString = nodes
-        .map((node) => `<option value="${node.id}">${node.label}</option>`)
-        .join("");
-    select.innerHTML = optionHtmlString;
+    const selects = document.querySelectorAll("select");
+    selects.forEach((select) => {
+        const optionHtmlString = nodes
+            .map((node) => `<option value="${node.id}">${node.label}</option>`)
+            .join("");
+        select.innerHTML = optionHtmlString;
+    });
 }
 
 let nodes = [];
@@ -43,16 +45,12 @@ function checkAndGetData(password) {
             if (!resp.successful) {
                 return alert("wrong password");
             }
-            try {
-                localStorage.password = password;
-                console.log(resp);
-                nodes = resp.data.nodes;
-                edges = resp.data.edges;
-                draw();
-                populateSelectList(resp.data.nodes);
-            } catch (error) {
-                console.log(error);
-            }
+
+            localStorage.password = password;
+            nodes = resp.data.nodes;
+            edges = resp.data.edges;
+            draw();
+            populateSelectList(resp.data.nodes);
         })
         .catch(() => {
             alert("Fetching data failed 1");
@@ -76,7 +74,7 @@ function draw() {
     });
 
     if (window.location.host.includes("localhost")) {
-        nodesData = nodesData.filter((_, i) => i < 50);
+        //nodesData = nodesData.filter((_, i) => i < 50);
     }
 
     nodes = new vis.DataSet(nodesData);
@@ -133,9 +131,11 @@ function draw() {
     const closePopupEdgeElement = popupEdge.querySelector(".close");
     const popupEdgeButton = popupEdge.querySelector("button.update-edge");
 
-    const popUpEdgeFromElement = document.querySelector(".popup-edge .from");
-    const popUpEdgeToElement = document.querySelector(".popup-edge .to");
     const popUpEdgeLabelElement = document.querySelector(".popup-edge .label");
+    const popUpEdgeFromElement = document.querySelector(
+        ".popup-edge select.from"
+    );
+    const popUpEdgeToElement = document.querySelector(".popup-edge select.to");
 
     popupButton.addEventListener("click", () => {
         fetch(`${login_url_base}/node/${selectedNodeId}`, {
@@ -180,9 +180,8 @@ function draw() {
     closePopupEdgeElement.addEventListener("click", () =>
         popupEdge.classList.remove("visible")
     );
-    console.log(network);
+
     network.on("click", function (params) {
-        console.log("click");
         const clickedNodeId = params.nodes[0];
         const clickedEdgeId = params.edges[0];
         if (clickedNodeId != undefined) {
@@ -200,8 +199,6 @@ function draw() {
         }
 
         if (clickedEdgeId != undefined) {
-            console.log("edge clicked");
-
             selectedEdgeId = clickedEdgeId;
             const edgesInNetwork = network.body.edges;
             const edgeClicked = network.body.edges[clickedEdgeId];
@@ -245,10 +242,8 @@ document
         })
             .then((resp) => resp.json())
             .then((resp) => {
-                console.log("hereeee");
                 let { id, label, color, image } = resp.nodeCreated;
                 nodes.add({ id, label, color, image });
-                console.log("node", { id, label, color, image });
 
                 let { from, to } = resp.edgeCreated;
                 edges.add({ from, to, label: resp.edgeCreated.label });
