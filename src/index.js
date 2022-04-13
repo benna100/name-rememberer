@@ -144,6 +144,7 @@ function draw() {
                 label: popUpLabelElement.value,
                 image: popUpImageElement.value,
                 color: popUpColorElement.value,
+                password: localStorage.password,
             }),
             headers: {
                 "Content-Type": "application/json",
@@ -162,6 +163,7 @@ function draw() {
                 from: popUpEdgeFromElement.value,
                 to: popUpEdgeToElement.value,
                 label: popUpEdgeLabelElement.value,
+                password: localStorage.password,
             }),
             headers: {
                 "Content-Type": "application/json",
