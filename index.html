@@ -44,33 +44,64 @@
             <button>Login</button>
             <span class="loading">Loading network...</span>
             <div class="network"></div>
-            <section class="add-node">
-                <input class="label" placeholder="Add label" type="text" />
-                <input class="color" placeholder="Add color" type="text" />
-                <input class="image" placeholder="Add image" type="text" />
-                <select name="" id="" class="connected-to"></select>
+            <section class="popup-add-node">
+                <h3>Create new connection</h3>
+                
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
+                <label for="color">Color</label>
+                <input class="color" id="color" placeholder="Add color" type="text" />
+
+                <label for="image">Image</label>
+                <input class="image" id="image" placeholder="Add image" type="text" />
+
+                <label for="connected-to">Connected to</label>
+                <select id="connected-to" class="connected-to"></select>
+
+                <label for="connection-label">Connection label</label>
                 <input
                     class="connection-label"
                     placeholder="Connection label"
                     type="text"
+                    id="connected-to"
                 />
-                <button class="create-new-node">Create new node</button>
+
+                <button class="close">Close</span>
+                <button class="create-new-node">Create new connection</button>
             </section>
             <section class="popup">
-                <input class="label" placeholder="Label" type="text" />
-                <input class="color" placeholder="Color" type="text" />
-                <input class="image" placeholder="Image" type="text" />
+                <h3>Edit connection</h3>
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
+                <label for="color">Color</label>
+                <input class="color" id="color" placeholder="Add color" type="text" />
+
+                <label for="image">Image</label>
+                <input class="image" id="image" placeholder="Add image" type="text" />
+
                 <button class="close">Close</span>
-                <button class="update-node">Update node</button>
+                <button class="update-node">Edit connection</button>
             </section>
 
             <section class="popup-edge">
-                <select name="" id="" placeholder="from" class="from"></select>
-                <select name="" id="" placeholder="to" class="to"></select>
-                <input class="label" placeholder="Label" type="text" />
+                <h3>Edit edge</h3>
+                <label for="from">From id</label>
+                <select name="" id="from" placeholder="from" class="from"></select>
+                
+                <label for="to">To id</label>
+                <select name="" id="to" placeholder="To id" class="to"></select>
+
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
                 <button class="close">Close</span>
                 <button class="update-edge">Update edge</button>
             </section>
+
+            <button class="add-node">Add connection</button>
+
         </main>
     </body>
 </html>

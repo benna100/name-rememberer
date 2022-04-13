@@ -3,9 +3,10 @@ import "./main.scss";
 document.querySelector("button").addEventListener("click", () => {
     checkAndGetData(input.value);
 });
-const loading = document.querySelector("span.loading");
 
+const loading = document.querySelector("span.loading");
 const input = document.querySelector("input");
+const addNode = document.querySelector("section.popup-add-node");
 
 let selectedNodeId;
 let selectedEdgeId;
@@ -23,6 +24,18 @@ function populateSelectList(nodes) {
     const selects = document.querySelectorAll("select");
     selects.forEach((select) => {
         const optionHtmlString = nodes
+            .sort((a, b) => {
+                let fa = a.label.toLowerCase(),
+                    fb = b.label.toLowerCase();
+
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            })
             .map((node) => `<option value="${node.id}">${node.label}</option>`)
             .join("");
         select.innerHTML = optionHtmlString;
@@ -74,7 +87,7 @@ function draw() {
     });
 
     if (window.location.host.includes("localhost")) {
-        //nodesData = nodesData.filter((_, i) => i < 50);
+        // nodesData = nodesData.filter((_, i) => i < 50);
     }
 
     nodes = new vis.DataSet(nodesData);
@@ -183,9 +196,27 @@ function draw() {
         popupEdge.classList.remove("visible")
     );
 
+    document
+        .querySelector("section.popup-add-node button.close")
+        .addEventListener("click", () => addNode.classList.remove("visible"));
+
     network.on("click", function (params) {
         const clickedNodeId = params.nodes[0];
         const clickedEdgeId = params.edges[0];
+
+        // so you can click both a node and a an edge at the same time if you click a node
+        if (clickedEdgeId != undefined && clickedNodeId == undefined) {
+            selectedEdgeId = clickedEdgeId;
+            const edgesInNetwork = network.body.edges;
+            const edgeClicked = network.body.edges[clickedEdgeId];
+            const { to, from, label } = edgeClicked.options;
+
+            popupEdge.classList.add("visible");
+            popUpEdgeToElement.value = from == undefined ? "" : from;
+            popUpEdgeFromElement.value = to == undefined ? "" : to;
+            popUpEdgeLabelElement.value = label == undefined ? "" : label;
+        }
+
         if (clickedNodeId != undefined) {
             selectedNodeId = clickedNodeId;
             popup.classList.add("visible");
@@ -195,21 +226,9 @@ function draw() {
             let { id, label, image, color } = nodeClicked.options;
             color = color.background;
 
-            popUpLabelElement.value = label;
-            popUpImageElement.value = image;
-            popUpColorElement.value = color;
-        }
-
-        if (clickedEdgeId != undefined) {
-            selectedEdgeId = clickedEdgeId;
-            const edgesInNetwork = network.body.edges;
-            const edgeClicked = network.body.edges[clickedEdgeId];
-            const { to, from, label } = edgeClicked.options;
-
-            popupEdge.classList.add("visible");
-            popUpEdgeToElement.value = to;
-            popUpEdgeFromElement.value = from;
-            popUpEdgeLabelElement.value = label;
+            popUpLabelElement.value = label == undefined ? "" : label;
+            popUpImageElement.value = image == undefined ? "" : image;
+            popUpColorElement.value = color == undefined ? "" : color;
         }
     });
 }
@@ -217,14 +236,14 @@ function draw() {
 document
     .querySelector("button.create-new-node")
     .addEventListener("click", () => {
-        const label = document.querySelector(".add-node .label").value;
-        const color = document.querySelector(".add-node .color").value;
-        const image = document.querySelector(".add-node .image").value;
+        const label = document.querySelector(".popup-add-node .label").value;
+        const color = document.querySelector(".popup-add-node .color").value;
+        const image = document.querySelector(".popup-add-node .image").value;
         const connectedToId = document.querySelector(
-            ".add-node .connected-to"
+            ".popup-add-node .connected-to"
         ).value;
         const connectionLabel = document.querySelector(
-            ".add-node .connection-label"
+            ".popup-add-node .connection-label"
         ).value;
 
         fetch(`${login_url_base}/node`, {
@@ -249,8 +268,15 @@ document
 
                 let { from, to } = resp.edgeCreated;
                 edges.add({ from, to, label: resp.edgeCreated.label });
+
+                addNode.classList.remove("visible");
             })
             .catch(() => {
                 alert("Fetching data failed");
+                addNode.classList.remove("visible");
             });
     });
+
+document
+    .querySelector("main > button.add-node")
+    .addEventListener("click", () => addNode.classList.add("visible"));

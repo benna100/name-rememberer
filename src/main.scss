@@ -27,16 +27,17 @@ body {
     font-family: "Montserrat", sans-serif;
     position: relative;
     min-height: 100vh;
-    padding-top: 36px;
 }
 
 main {
-    margin: 0 auto;
-    max-width: 800px;
-    padding: 0 12px 0;
-
     > span {
         margin-bottom: 12px;
+    }
+
+    > button.add-node {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
     }
 }
 
@@ -69,11 +70,12 @@ h3,
 h4 {
     font-size: 1.3rem;
     line-height: 2.3rem;
-    margin-bottom: 36px;
+    margin-bottom: 12px;
 }
 
 section.popup,
-section.popup-edge {
+section.popup-edge,
+section.popup-add-node {
     width: 300px;
     position: absolute;
     top: 50%;
@@ -83,12 +85,29 @@ section.popup-edge {
     background-color: white;
     border-radius: 8px;
     display: none;
+    box-shadow: 0 6px 8px 0 rgba(163, 163, 163, 0.21);
 
     &.visible {
         display: block;
     }
 
-    select {
+    select,
+    input {
         display: block;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    label {
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    button.close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background-color: transparent;
+        border: none;
     }
 }
