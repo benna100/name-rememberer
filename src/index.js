@@ -8,6 +8,7 @@ const loading = document.querySelector("span.loading");
 const input = document.querySelector("input");
 
 let selectedNodeId;
+let selectedEdgeId;
 
 const login_url_base = window.location.host.includes("localhost")
     ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app"
@@ -60,7 +61,7 @@ function checkAndGetData(password) {
 
 // Called when the Visualization API is loaded.
 function draw() {
-    const nodesData = nodes.map(({ image, id, label, color }) => {
+    let nodesData = nodes.map(({ image, id, label, color }) => {
         const obj = {
             id,
             image,
@@ -73,6 +74,10 @@ function draw() {
 
         return obj;
     });
+
+    if (window.location.host.includes("localhost")) {
+        nodesData = nodesData.filter((_, i) => i < 50);
+    }
 
     nodes = new vis.DataSet(nodesData);
     edges = new vis.DataSet(edges);
@@ -124,6 +129,14 @@ function draw() {
     const popUpImageElement = document.querySelector(".popup .image");
     const popUpColorElement = document.querySelector(".popup .color");
 
+    const popupEdge = document.querySelector(".popup-edge");
+    const closePopupEdgeElement = popupEdge.querySelector(".close");
+    const popupEdgeButton = popupEdge.querySelector("button.update-edge");
+
+    const popUpEdgeFromElement = document.querySelector(".popup-edge .from");
+    const popUpEdgeToElement = document.querySelector(".popup-edge .to");
+    const popUpEdgeLabelElement = document.querySelector(".popup-edge .label");
+
     popupButton.addEventListener("click", () => {
         fetch(`${login_url_base}/node/${selectedNodeId}`, {
             method: "PUT",
@@ -142,30 +155,62 @@ function draw() {
             });
     });
 
+    popupEdgeButton.addEventListener("click", () => {
+        fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
+            method: "PUT",
+            body: JSON.stringify({
+                from: popUpEdgeFromElement.value,
+                to: popUpEdgeToElement.value,
+                label: popUpEdgeLabelElement.value,
+            }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+                popupEdge.classList.remove("visible");
+            });
+    });
+
     closePopupElement.addEventListener("click", () =>
         popup.classList.remove("visible")
     );
+
+    closePopupEdgeElement.addEventListener("click", () =>
+        popupEdge.classList.remove("visible")
+    );
+    console.log(network);
     network.on("click", function (params) {
+        console.log("click");
         const clickedNodeId = params.nodes[0];
         const clickedEdgeId = params.edges[0];
         if (clickedNodeId != undefined) {
             selectedNodeId = clickedNodeId;
             popup.classList.add("visible");
 
-            fetch(`${login_url_base}/node/${clickedNodeId}`)
-                .then((resp) => resp.json())
-                .then((resp) => {
-                    popUpLabelElement.value = resp.label;
-                    popUpImageElement.value = resp.image;
-                    popUpColorElement.value = resp.color;
-                })
-                .catch(() => {
-                    alert("Fetching data failed");
-                });
+            const nodesInNetwork = network.body.nodes;
+            const nodeClicked = network.body.nodes[clickedNodeId];
+            let { id, label, image, color } = nodeClicked.options;
+            color = color.background;
+
+            popUpLabelElement.value = label;
+            popUpImageElement.value = image;
+            popUpColorElement.value = color;
         }
 
         if (clickedEdgeId != undefined) {
-            console.log(clickedEdgeId);
+            console.log("edge clicked");
+
+            selectedEdgeId = clickedEdgeId;
+            const edgesInNetwork = network.body.edges;
+            const edgeClicked = network.body.edges[clickedEdgeId];
+            const { to, from, label } = edgeClicked.options;
+
+            popupEdge.classList.add("visible");
+            popUpEdgeToElement.value = to;
+            popUpEdgeFromElement.value = from;
+            popUpEdgeLabelElement.value = label;
         }
     });
 }
