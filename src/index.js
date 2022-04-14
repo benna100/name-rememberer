@@ -1,24 +1,37 @@
 import "./main.scss";
 
-// Import the functions you need from the SDKs you need
+import { initializeApp, firebase } from "firebase/app";
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+} from "firebase/auth";
 
-// import { initializeApp, firebase } from "firebase/app";
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+const firebaseConfig = {
+    apiKey: "AIzaSyADUUVLKrwOjjVImTIHiI7xyxRSk22VZVI",
+    authDomain: "name-rememberer-8ed08.firebaseapp.com",
+    projectId: "name-rememberer-8ed08",
+    storageBucket: "name-rememberer-8ed08.appspot.com",
+    messagingSenderId: "503135513537",
+    appId: "1:503135513537:web:510a575730bd7febce5d40",
+};
 
-// const firebaseConfig = {
-//     apiKey: "AIzaSyADUUVLKrwOjjVImTIHiI7xyxRSk22VZVI",
-//     authDomain: "name-rememberer-8ed08.firebaseapp.com",
-//     projectId: "name-rememberer-8ed08",
-//     storageBucket: "name-rememberer-8ed08.appspot.com",
-//     messagingSenderId: "503135513537",
-//     appId: "1:503135513537:web:510a575730bd7febce5d40",
-// };
+// Initialize Firebase
 
-// // Initialize Firebase
+const app = initializeApp(firebaseConfig);
 
-// const app = initializeApp(firebaseConfig);
-
-// const auth = getAuth(app);
+const auth = getAuth(app);
+let accessToken;
+onAuthStateChanged(auth, function (user) {
+    if (user) {
+        checkAndGetData(user.accessToken);
+        accessToken = user.accessToken;
+        document.querySelector("input").remove();
+        document.querySelector("button").remove();
+    } else {
+        console.log("logged out");
+    }
+});
 
 // signInWithEmailAndPassword(auth, "benjamin.dals.hughes@gmail.com", "abcdef")
 //     .then((userCredential) => {
@@ -33,10 +46,6 @@ import "./main.scss";
 //         const errorMessage = error.message;
 //     });
 
-document.querySelector("button").addEventListener("click", () => {
-    checkAndGetData(input.value);
-});
-
 const loading = document.querySelector("span.loading");
 const input = document.querySelector("input");
 const addNode = document.querySelector("section.popup-add-node");
@@ -47,11 +56,6 @@ let selectedEdgeId;
 const login_url_base = window.location.host.includes("localhost")
     ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app"
     : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/app";
-if (localStorage.password) {
-    checkAndGetData(localStorage.password);
-    document.querySelector("input").remove();
-    document.querySelector("button").remove();
-}
 
 function populateSelectList(nodes) {
     const selects = document.querySelectorAll("select");
@@ -78,11 +82,10 @@ function populateSelectList(nodes) {
 let nodes = [];
 let edges = [];
 
-function checkAndGetData(password) {
+function checkAndGetData(accessToken) {
     fetch(`${login_url_base}/data`, {
-        method: "POST",
-        body: JSON.stringify({ password }),
         headers: {
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
         },
     })
@@ -92,7 +95,6 @@ function checkAndGetData(password) {
                 return alert("wrong password");
             }
 
-            localStorage.password = password;
             nodes = resp.data.nodes;
             edges = resp.data.edges;
             draw();
@@ -191,14 +193,12 @@ function draw() {
             color: popUpColorElement.value,
         };
 
-        let newNodeWithPassword = newNode;
-        newNodeWithPassword.password = localStorage.password;
-
         fetch(`${login_url_base}/node/${selectedNodeId}`, {
             method: "PUT",
-            body: JSON.stringify(newNodeWithPassword),
+            body: JSON.stringify(newNode),
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
             },
         })
             .then((resp) => resp.json())
@@ -217,14 +217,12 @@ function draw() {
             label: popUpEdgeLabelElement.value,
         };
 
-        let newEdgeWithPassword = newEdge;
-        newEdgeWithPassword.password = localStorage.password;
-
         fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
             method: "PUT",
-            body: JSON.stringify(newEdgeWithPassword),
+            body: JSON.stringify(newEdge),
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
             },
         })
             .then((resp) => resp.json())
@@ -302,10 +300,10 @@ document
                 color,
                 connectedToId,
                 connectionLabel,
-                password: localStorage.password,
             }),
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
             },
         })
             .then((resp) => resp.json())
