@@ -1,5 +1,38 @@
 import "./main.scss";
 
+// Import the functions you need from the SDKs you need
+
+// import { initializeApp, firebase } from "firebase/app";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
+// const firebaseConfig = {
+//     apiKey: "AIzaSyADUUVLKrwOjjVImTIHiI7xyxRSk22VZVI",
+//     authDomain: "name-rememberer-8ed08.firebaseapp.com",
+//     projectId: "name-rememberer-8ed08",
+//     storageBucket: "name-rememberer-8ed08.appspot.com",
+//     messagingSenderId: "503135513537",
+//     appId: "1:503135513537:web:510a575730bd7febce5d40",
+// };
+
+// // Initialize Firebase
+
+// const app = initializeApp(firebaseConfig);
+
+// const auth = getAuth(app);
+
+// signInWithEmailAndPassword(auth, "benjamin.dals.hughes@gmail.com", "abcdef")
+//     .then((userCredential) => {
+//         // Signed in
+//         const user = userCredential.user;
+//         console.log(auth.currentUser.accessToken);
+//         // ...
+//     })
+//     .catch((error) => {
+//         console.log(error);
+//         const errorCode = error.code;
+//         const errorMessage = error.message;
+//     });
+
 document.querySelector("button").addEventListener("click", () => {
     checkAndGetData(input.value);
 });
@@ -87,7 +120,7 @@ function draw() {
     });
 
     if (window.location.host.includes("localhost")) {
-        // nodesData = nodesData.filter((_, i) => i < 50);
+        //nodesData = nodesData.filter((_, i) => i < 50);
     }
 
     nodes = new vis.DataSet(nodesData);
@@ -151,14 +184,19 @@ function draw() {
     const popUpEdgeToElement = document.querySelector(".popup-edge select.to");
 
     popupButton.addEventListener("click", () => {
+        const newNode = {
+            id: selectedNodeId,
+            label: popUpLabelElement.value,
+            image: popUpImageElement.value,
+            color: popUpColorElement.value,
+        };
+
+        let newNodeWithPassword = newNode;
+        newNodeWithPassword.password = localStorage.password;
+
         fetch(`${login_url_base}/node/${selectedNodeId}`, {
             method: "PUT",
-            body: JSON.stringify({
-                label: popUpLabelElement.value,
-                image: popUpImageElement.value,
-                color: popUpColorElement.value,
-                password: localStorage.password,
-            }),
+            body: JSON.stringify(newNodeWithPassword),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -166,18 +204,25 @@ function draw() {
             .then((resp) => resp.json())
             .then((resp) => {
                 popup.classList.remove("visible");
+
+                nodes.updateOnly(newNode);
             });
     });
 
     popupEdgeButton.addEventListener("click", () => {
+        const newEdge = {
+            id: selectedEdgeId,
+            from: popUpEdgeFromElement.value,
+            to: popUpEdgeToElement.value,
+            label: popUpEdgeLabelElement.value,
+        };
+
+        let newEdgeWithPassword = newEdge;
+        newEdgeWithPassword.password = localStorage.password;
+
         fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
             method: "PUT",
-            body: JSON.stringify({
-                from: popUpEdgeFromElement.value,
-                to: popUpEdgeToElement.value,
-                label: popUpEdgeLabelElement.value,
-                password: localStorage.password,
-            }),
+            body: JSON.stringify(newEdgeWithPassword),
             headers: {
                 "Content-Type": "application/json",
             },
@@ -185,6 +230,8 @@ function draw() {
             .then((resp) => resp.json())
             .then((resp) => {
                 popupEdge.classList.remove("visible");
+
+                edges.updateOnly(newEdge);
             });
     });
 
