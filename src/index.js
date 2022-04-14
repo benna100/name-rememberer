@@ -28,23 +28,27 @@ onAuthStateChanged(auth, function (user) {
         accessToken = user.accessToken;
         document.querySelector("input").remove();
         document.querySelector("button").remove();
+        document.querySelector("main > .login").remove();
     } else {
-        console.log("logged out");
+        const loginElement = document.querySelector("main > .login");
+        const loginButton = loginElement.querySelector("button.login");
+        loginButton.addEventListener("click", () => {
+            const email = loginElement.querySelector("input.email").value;
+            const password = loginElement.querySelector("input.password").value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    // const user = userCredential.user;
+                    // checkAndGetData(auth.currentUser.accessToken);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                });
+        });
     }
 });
-
-// signInWithEmailAndPassword(auth, "benjamin.dals.hughes@gmail.com", "abcdef")
-//     .then((userCredential) => {
-//         // Signed in
-//         const user = userCredential.user;
-//         console.log(auth.currentUser.accessToken);
-//         // ...
-//     })
-//     .catch((error) => {
-//         console.log(error);
-//         const errorCode = error.code;
-//         const errorMessage = error.message;
-//     });
 
 const loading = document.querySelector("span.loading");
 const input = document.querySelector("input");
