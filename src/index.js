@@ -83,8 +83,8 @@ function populateSelectList(nodes) {
     });
 }
 
-let nodes = [];
-let edges = [];
+let nodesDataset = [];
+let edgesDataset = [];
 
 function checkAndGetData(accessToken) {
     fetch(`${login_url_base}/data`, {
@@ -99,10 +99,25 @@ function checkAndGetData(accessToken) {
                 return alert("wrong password");
             }
 
-            nodes = resp.data.nodes;
-            edges = resp.data.edges;
+            let nodes = resp.data.nodes.map(({ image, id, label, color }) => {
+                const obj = {
+                    id,
+                    image,
+                    label,
+                    shape: image !== "" ? "image" : "box",
+                };
+                if (color !== "") {
+                    obj.color = color;
+                }
+
+                return obj;
+            });
+
+            nodesDataset = new vis.DataSet(nodes);
+            edgesDataset = new vis.DataSet(resp.data.edges);
+
             draw();
-            populateSelectList(resp.data.nodes);
+            populateSelectList(nodesDataset.get());
         })
         .catch(() => {
             alert("Fetching data failed 1");
@@ -111,26 +126,9 @@ function checkAndGetData(accessToken) {
 
 // Called when the Visualization API is loaded.
 function draw() {
-    let nodesData = nodes.map(({ image, id, label, color }) => {
-        const obj = {
-            id,
-            image,
-            label,
-            shape: image !== "" ? "image" : "box",
-        };
-        if (color !== "") {
-            obj.color = color;
-        }
-
-        return obj;
-    });
-
     if (window.location.host.includes("localhost")) {
         //nodesData = nodesData.filter((_, i) => i < 50);
     }
-
-    nodes = new vis.DataSet(nodesData);
-    edges = new vis.DataSet(edges);
 
     // create people.
     // value corresponds with the age of the person
@@ -142,8 +140,8 @@ function draw() {
     // create a network
     var container = document.querySelector(".network");
     var data = {
-        nodes: nodes,
-        edges: edges,
+        nodes: nodesDataset,
+        edges: edgesDataset,
     };
 
     // TODO: To improve performance, it is possible to listen for a stabilization event,
@@ -248,7 +246,10 @@ function draw() {
             .then((resp) => {
                 popup.classList.remove("visible");
 
-                nodes.updateOnly(newNode);
+                nodesDataset.updateOnly(newNode);
+
+                updateSelectLists();
+                clearAllInputs();
             });
     });
 
@@ -273,6 +274,9 @@ function draw() {
                 popupEdge.classList.remove("visible");
 
                 edges.updateOnly(newEdge);
+
+                updateSelectLists();
+                clearAllInputs();
             });
     });
 
@@ -352,15 +356,20 @@ document
             .then((resp) => resp.json())
             .then((resp) => {
                 let { id, label, color, image } = resp.nodeCreated;
-                nodes.add({ id, label, color, image });
+
+                nodesDataset.add({ id, label, color, image });
 
                 let { from, to } = resp.edgeCreated;
-                edges.add({ from, to, label: resp.edgeCreated.label });
+
+                edgesDataset.add({ from, to, label: resp.edgeCreated.label });
 
                 addNode.classList.remove("visible");
+
+                updateSelectLists(resp.nodeCreated);
+                clearAllInputs();
             })
             .catch(() => {
-                alert("Fetching data failed");
+                alert("Node creation failed");
                 addNode.classList.remove("visible");
             });
     });
@@ -368,3 +377,35 @@ document
 document
     .querySelector("main > button.add-node")
     .addEventListener("click", () => addNode.classList.add("visible"));
+
+function updateSelectLists() {
+    const selects = document.querySelectorAll("select");
+
+    selects.forEach((select) => {
+        const optionHtmlString = nodesDataset
+            .get()
+            .sort((a, b) => {
+                let fa = a.label.toLowerCase(),
+                    fb = b.label.toLowerCase();
+
+                if (fa < fb) {
+                    return -1;
+                }
+                if (fa > fb) {
+                    return 1;
+                }
+                return 0;
+            })
+            .map((node) => `<option value="${node.id}">${node.label}</option>`)
+            .join("");
+        select.innerHTML = optionHtmlString;
+    });
+}
+
+function clearAllInputs() {
+    const inputs = document.querySelectorAll("input");
+
+    inputs.forEach((input) => {
+        input.value = "";
+    });
+}

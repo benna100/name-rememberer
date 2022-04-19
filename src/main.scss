@@ -86,6 +86,7 @@ section.popup-add-node {
     border-radius: 8px;
     display: none;
     box-shadow: 0 6px 8px 0 rgba(163, 163, 163, 0.21);
+    z-index: 100;
 
     &.visible {
         display: block;
