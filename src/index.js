@@ -156,15 +156,51 @@ function draw() {
             font: { color: "#000" },
             shapeProperties: {
                 useBorderWithImage: true,
+                interpolation: false, // 'true' for intensive zooming
             },
         },
         edges: {
             color: "lightgray",
+            smooth: {
+                type: "continuous",
+                roundness: 1,
+            },
         },
         layout: {
             improvedLayout: false,
         },
+        physics: {
+            solver: "forceAtlas2Based",
+            forceAtlas2Based: {
+                gravitationalConstant: -100,
+            },
+            // solver: "hierarchicalRepulsion",
+            // stabilization: {
+            //     iterations: 987,
+            //     updateInterval: 10,
+            // },
+        },
     };
+
+    /*
+    //physics: { stabilization: false },
+        physics: {
+            solver: "forceAtlas2Based",
+            forceAtlas2Based: {
+                gravitationalConstant: -8000,
+                springConstant: 0.04,
+                springLength: 95,
+            },
+            adaptiveTimestep: true,
+            stabilization: {
+                iterations: 987,
+                updateInterval: 10,
+            },
+        },
+        layout: {
+            improvedLayout: true,
+        },
+    */
     const network = new vis.Network(container, data, options);
 
     network.on("afterDrawing", () => {
