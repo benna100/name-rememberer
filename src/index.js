@@ -145,6 +145,9 @@ function draw() {
         nodes: nodes,
         edges: edges,
     };
+
+    // TODO: To improve performance, it is possible to listen for a stabilization event,
+    // then save the positions of the nodes in the database. This is very nice to have though
     var options = {
         nodes: {
             borderWidth: 1,
