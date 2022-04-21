@@ -33,9 +33,21 @@ const signup = document.querySelector(".signup");
 const signupButton = document.querySelector(".signup button.signup");
 const login = document.querySelector(".login");
 const signOutButton = document.querySelector(".signout");
+const getStartedButton = document.querySelector(".get-started");
+const dashboard = document.querySelector(".dashboard");
+const tryForFree = document.querySelector(".try-for-free");
+
+tryForFree.addEventListener("click", () => {
+    login.classList.remove("hidden");
+    dashboard.remove();
+});
+
+getStartedButton.addEventListener("click", () => {
+    login.classList.remove("hidden");
+    dashboard.remove();
+});
 
 signOutButton.addEventListener("click", async () => {
-    console.log("signput");
     await auth.signOut();
     alert("user logged out");
     window.location.reload(true);
@@ -73,9 +85,14 @@ onAuthStateChanged(auth, function (user) {
     if (user) {
         checkAndGetData(user.accessToken);
         accessToken = user.accessToken;
-        document.querySelector("input").remove();
-        document.querySelector("button").remove();
         document.querySelector("main > .login").remove();
+        try {
+            document.querySelector(".dashboard").remove();
+        } catch (error) {}
+
+        document.querySelector(".network").classList.remove("hidden");
+        signOutButton.classList.remove("hidden");
+        document.querySelector(".add-node").classList.remove("hidden");
         showSignupSpan.remove();
     } else {
         const loginElement = document.querySelector("main > .login");
@@ -159,8 +176,6 @@ function checkAndGetData(accessToken) {
 
                 return obj;
             });
-
-            console.log(nodes);
 
             nodesDataset = new vis.DataSet(nodes);
             edgesDataset = new vis.DataSet(resp.data.edges);

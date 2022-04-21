@@ -7,7 +7,6 @@
 }
 
 body {
-    background-color: #f9fbfd;
 }
 
 * {
@@ -38,13 +37,32 @@ main {
         position: absolute;
         bottom: 36px;
         right: 12px;
+
+        &.hidden {
+            display: none;
+        }
     }
 
     button.signout {
         position: absolute;
         bottom: 36px;
         left: 12px;
+
+        &.hidden {
+            display: none;
+        }
     }
+}
+
+section.dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+
+.network.hidden {
+    display: none;
 }
 
 h1,
@@ -73,10 +91,17 @@ h2 {
 }
 
 h3,
-h4 {
+h4,
+h6 {
     font-size: 1.3rem;
     line-height: 2.3rem;
     margin-bottom: 12px;
+}
+
+input {
+    border: 1px solid rgb(32, 32, 32);
+    padding: 6px;
+    border-radius: 8px;
 }
 
 .signup {
@@ -203,4 +228,9 @@ button:not(.close):hover {
 button:not(.close):active {
     box-shadow: #d6d6e7 0 3px 7px inset;
     transform: translateY(2px);
+}
+
+main #get-started {
+    max-width: 300px;
+    margin-bottom: 36px;
 }
