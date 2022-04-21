@@ -5,6 +5,8 @@ import {
     getAuth,
     signInWithEmailAndPassword,
     onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signOut,
 } from "firebase/auth";
 
 const firebaseConfig = {
@@ -22,13 +24,59 @@ const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
 let accessToken;
+
+const loading = document.querySelector("span.loading");
+
+const showSignupSpan = document.querySelector("span.show-signup");
+const showSignupButton = document.querySelector("span.show-signup button");
+const signup = document.querySelector(".signup");
+const signupButton = document.querySelector(".signup button.signup");
+const login = document.querySelector(".login");
+const signOutButton = document.querySelector(".signout");
+
+signOutButton.addEventListener("click", async () => {
+    console.log("signput");
+    await auth.signOut();
+    alert("user logged out");
+    window.location.reload(true);
+});
+
+showSignupButton.addEventListener("click", () => {
+    login.classList.add("hidden");
+    signup.classList.remove("hidden");
+    showSignupSpan.remove();
+});
+
+signupButton.addEventListener("click", () => {
+    console.log(123);
+    const signupEmail = signup.querySelector(".email").value;
+    const signupPassword = signup.querySelector(".password").value;
+    console.log(signupEmail, signupPassword);
+    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            console.log(user);
+            alert("user created 🎉");
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(error);
+            // ..
+        });
+});
+
 onAuthStateChanged(auth, function (user) {
+    loading.remove();
     if (user) {
         checkAndGetData(user.accessToken);
         accessToken = user.accessToken;
         document.querySelector("input").remove();
         document.querySelector("button").remove();
         document.querySelector("main > .login").remove();
+        showSignupSpan.remove();
     } else {
         const loginElement = document.querySelector("main > .login");
         const loginButton = loginElement.querySelector("button.login");
@@ -50,7 +98,6 @@ onAuthStateChanged(auth, function (user) {
     }
 });
 
-const loading = document.querySelector("span.loading");
 const input = document.querySelector("input");
 const addNode = document.querySelector("section.popup-add-node");
 
@@ -112,6 +159,8 @@ function checkAndGetData(accessToken) {
 
                 return obj;
             });
+
+            console.log(nodes);
 
             nodesDataset = new vis.DataSet(nodes);
             edgesDataset = new vis.DataSet(resp.data.edges);
@@ -357,11 +406,20 @@ document
             .then((resp) => {
                 let { id, label, color, image } = resp.nodeCreated;
 
+                // yes i know this is a hack
+                if (color === "") {
+                    color = "#fff";
+                }
                 nodesDataset.add({ id, label, color, image });
+                if (resp.edgeCreated) {
+                    let { from, to } = resp.edgeCreated;
 
-                let { from, to } = resp.edgeCreated;
-
-                edgesDataset.add({ from, to, label: resp.edgeCreated.label });
+                    edgesDataset.add({
+                        from,
+                        to,
+                        label: resp.edgeCreated.label,
+                    });
+                }
 
                 addNode.classList.remove("visible");
 

@@ -36,8 +36,14 @@ main {
 
     > button.add-node {
         position: absolute;
-        bottom: 12px;
+        bottom: 36px;
         right: 12px;
+    }
+
+    button.signout {
+        position: absolute;
+        bottom: 36px;
+        left: 12px;
     }
 }
 
@@ -71,6 +77,43 @@ h4 {
     font-size: 1.3rem;
     line-height: 2.3rem;
     margin-bottom: 12px;
+}
+
+.signup {
+    &.hidden {
+        display: none;
+    }
+}
+
+.login {
+    &.hidden {
+        display: none;
+    }
+}
+
+.popup-style {
+    width: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 24px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 6px 8px 0 rgba(163, 163, 163, 0.21);
+    z-index: 100;
+
+    select,
+    input {
+        display: block;
+        width: 100%;
+        margin-bottom: 12px;
+    }
+
+    label {
+        margin-bottom: 6px;
+        display: block;
+    }
 }
 
 section.popup,
@@ -111,4 +154,53 @@ section.popup-add-node {
         background-color: transparent;
         border: none;
     }
+}
+
+/* CSS */
+button:not(.close) {
+    align-items: center;
+    appearance: none;
+    background-color: #fcfcfd;
+    border-radius: 4px;
+    border-width: 0;
+    box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+    box-sizing: border-box;
+    color: #36395a;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "JetBrains Mono", monospace;
+    height: 48px;
+    justify-content: center;
+    line-height: 1;
+    list-style: none;
+    overflow: hidden;
+    padding-left: 16px;
+    padding-right: 16px;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    transition: box-shadow 0.15s, transform 0.15s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    will-change: box-shadow, transform;
+    font-size: 18px;
+}
+
+button:not(.close):focus {
+    box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+}
+
+button:not(.close):hover {
+    box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
+        rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
+    transform: translateY(-2px);
+}
+
+button:not(.close):active {
+    box-shadow: #d6d6e7 0 3px 7px inset;
+    transform: translateY(2px);
 }

@@ -40,15 +40,37 @@
 
     <body>
         <main>
-            <section class="login">
-                <input type="text" class="email" placeholder="email">
-                <input type="password" placeholder="password" class="password">
+            <span class="loading">Loading application</span>
+            <section class="login popup-style">
+                <h3>Login</h3>
+
+                <label for="email">Email</label>
+                <input type="text" class="email" id="email" placeholder="email">
+
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" class="password" id="password">
 
                 <button class="login">login</button>
+
+                <br><br><br>
+                <span class="show-signup">To signup click <button>here</button></span>
+            </section>
+
+            
+
+            <section class="signup hidden popup-style">
+                <h3>Signup</h3>
+
+                <label for="email">Email</label>
+                <input type="text" class="email" id="email" placeholder="email">
+
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" class="password" id="password">
+
+                <button class="signup">signup</button>
             </section>
 
             <section class="network"></section>
-            <span class="loading">Loading network...</span>
             
             <section class="popup-add-node">
                 <h3>Create new connection</h3>
@@ -107,6 +129,7 @@
             </section>
 
             <button class="add-node">Add connection</button>
+            <button class="signout">Signout</button>
 
         </main>
     </body>
