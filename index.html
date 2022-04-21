@@ -36,19 +36,41 @@
             name="description"
             content="Få et hurtigt overblik. Det er nemt og simpelt!"
         />
-    <link rel="shortcut icon" href="favicon.png"><link href="styles.ac97863f471f2223710c.css" rel="stylesheet"><meta property="fb:app_id" content="123456789" /><meta property="og:url" content="https://hvorlangtervi.dk" /><meta property="og:type" content="website" /><meta property="og:title" content="Easier remember names" /><meta property="og:image" content="https://hvorlangtervi.dk/social-facebook-image.png" /><meta property="og:description" content="Få et godt overblik over dit netværk" /><meta property="og:site_name" content="Easier remember names" /><meta property="og:locale" content="da" /><meta property="og:article:author" content="Your name" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@site_account" /><meta name="twitter:creator" content="@twitterhandle" /><meta name="twitter:url" content="https://hvorlangtervi.dk" /><meta name="twitter:title" content="Easier remember names" /><meta name="twitter:description" content="Få et godt overblik over dit netværk" /><meta name="twitter:image" content="https://hvorlangtervi.dk/social-twitter.png" /></head>
+    <link rel="shortcut icon" href="favicon.png"><link href="styles.cb4dc9134bed8b3d22f2.css" rel="stylesheet"><meta property="fb:app_id" content="123456789" /><meta property="og:url" content="https://hvorlangtervi.dk" /><meta property="og:type" content="website" /><meta property="og:title" content="Easier remember names" /><meta property="og:image" content="https://hvorlangtervi.dk/social-facebook-image.png" /><meta property="og:description" content="Få et godt overblik over dit netværk" /><meta property="og:site_name" content="Easier remember names" /><meta property="og:locale" content="da" /><meta property="og:article:author" content="Your name" /><meta name="twitter:card" content="summary_large_image" /><meta name="twitter:site" content="@site_account" /><meta name="twitter:creator" content="@twitterhandle" /><meta name="twitter:url" content="https://hvorlangtervi.dk" /><meta name="twitter:title" content="Easier remember names" /><meta name="twitter:description" content="Få et godt overblik over dit netværk" /><meta name="twitter:image" content="https://hvorlangtervi.dk/social-twitter.png" /></head>
 
     <body>
         <main>
-            <section class="login">
-                <input type="text" class="email" placeholder="email">
-                <input type="password" placeholder="password" class="password">
+            <span class="loading">Loading application</span>
+            <section class="login popup-style">
+                <h3>Login</h3>
+
+                <label for="email">Email</label>
+                <input type="text" class="email" id="email" placeholder="email">
+
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" class="password" id="password">
 
                 <button class="login">login</button>
+
+                <br><br><br>
+                <span class="show-signup">To signup click <button>here</button></span>
+            </section>
+
+            
+
+            <section class="signup hidden popup-style">
+                <h3>Signup</h3>
+
+                <label for="email">Email</label>
+                <input type="text" class="email" id="email" placeholder="email">
+
+                <label for="password">Password</label>
+                <input type="password" placeholder="password" class="password" id="password">
+
+                <button class="signup">signup</button>
             </section>
 
             <section class="network"></section>
-            <span class="loading">Loading network...</span>
             
             <section class="popup-add-node">
                 <h3>Create new connection</h3>
@@ -107,7 +129,8 @@
             </section>
 
             <button class="add-node">Add connection</button>
+            <button class="signout">Signout</button>
 
         </main>
-    <script type="text/javascript" src="main.562cf840a47dd77b583b.js"></script></body>
+    <script type="text/javascript" src="main.8868859d5d9363c7760a.js"></script></body>
 </html>
