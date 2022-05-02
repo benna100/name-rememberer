@@ -58,6 +58,7 @@
         "webpack-dev-server": "^3.1.10"
     },
     "dependencies": {
+        "@faker-js/faker": "^6.3.1",
         "chart.js": "^2.9.4",
         "copy-webpack-plugin": "^7.0.0",
         "csv-parser": "^3.0.0",
