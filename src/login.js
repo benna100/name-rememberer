@@ -23,20 +23,18 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth(app);
+let accessToken;
 
-const signup = document.querySelector(".signup");
-const signupButton = document.querySelector(".signup button.signup");
+const login = document.querySelector(".login");
 
-signupButton.addEventListener("click", () => {
-    const signupEmail = signup.querySelector(".email").value;
-    const signupPassword = signup.querySelector(".password").value;
-
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+const loginElement = document.querySelector("main > .login");
+const loginButton = loginElement.querySelector("button.login");
+loginButton.addEventListener("click", () => {
+    const email = loginElement.querySelector("input.email").value;
+    const password = loginElement.querySelector("input.password").value;
+    signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in
-            const user = userCredential.user;
-            alert("user created 🎉 Redirecting to login");
-            window.location = "/login.html";
+            window.location = "/network.html";
         })
         .catch((error) => {
             const errorCode = error.code;

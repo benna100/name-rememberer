@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Mobile header color for Chrome, Firefox OS and Opera -->
+        <meta name="theme-color" content="#ff4970" />
+        <!-- Mobile header color Windows Phone -->
+        <meta name="msapplication-navbutton-color" content="#ff4970" />
+        <!-- Mobile header color for iOS Safari (supports black, black-translucent or default) -->
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <link href="https://unpkg.com/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css?family=Open+Sans:400,800"
+            rel="stylesheet"
+        />
+
+        <script
+            type="text/javascript"
+            src="https://visjs.github.io/vis-network/standalone/umd/vis-network.min.js"
+        ></script>
+
+        <style type="text/css">
+            body {
+                font: 10pt arial;
+                padding: 0px;
+                margin: 0px;
+            }
+            .network {
+                width: 100vw;
+                height: 100vh;
+            }
+        </style>
+        <!-- Primary Meta Tags -->
+        <title>Name rememberer - remember peoples names</title>
+        <meta
+            name="description"
+            content="Få et hurtigt overblik. Det er nemt og simpelt!"
+        />
+    </head>
+
+    <body>
+        <main>
+            <span class="loading">Loading application</span>         
+
+            <section class="network"></section>
+            
+            <section class="popup-add-node">
+                <h6>Create new connection</h6>
+                
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
+                <label for="color">Color</label>
+                <input class="color" id="color" placeholder="Add color" type="text" />
+
+                <label for="image">Image</label>
+                <input class="image" id="image" placeholder="Add image" type="text" />
+
+                <label for="connected-to">Connected to</label>
+                <select id="connected-to" class="connected-to"></select>
+
+                <label for="connection-label">Connection label</label>
+                <input
+                    class="connection-label"
+                    placeholder="Connection label"
+                    type="text"
+                    id="connected-to"
+                />
+
+                <button class="close">Close</span>
+                <button class="create-new-node">Create new connection</button>
+            </section>
+            <section class="popup">
+                <h6>Edit connection</h6>
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
+                <label for="color">Color</label>
+                <input class="color" id="color" placeholder="Add color" type="text" />
+
+                <label for="image">Image</label>
+                <input class="image" id="image" placeholder="Add image" type="text" />
+
+                <button class="close">Close</span>
+                <button class="update-node">Save</button>
+            </section>
+
+            <section class="popup-edge">
+                <h6>Edit edge</h6>
+                <label for="from">From id</label>
+                <select name="" id="from" placeholder="from" class="from"></select>
+                
+                <label for="to">To id</label>
+                <select name="" id="to" placeholder="To id" class="to"></select>
+
+                <label for="label">Label</label>
+                <input class="label" id="label" placeholder="Add label" type="text" />
+
+                <button class="close">Close</span>
+                <button class="update-edge">Save</button>
+            </section>
+
+            <button class="add-node">Add connection</button>
+            <button class="signout">Signout</button>
+        </main>
+    </body>
+</html>

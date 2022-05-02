@@ -15,9 +15,14 @@ const appDescription = "Få et godt overblik over dit netværk";
 
 const CnameWebpackPlugin = require("cname-webpack-plugin");
 
+const pages = ["index", "signup", "login", "network"];
+
 module.exports = {
     devtool: "source-map",
-    entry: { main: "./src/index.js" },
+    entry: pages.reduce((config, page) => {
+        config[page] = `./src/${page}.js`;
+        return config;
+    }, {}),
     output: {
         filename: "[name].[hash:20].js",
         path: buildPath,
@@ -87,13 +92,18 @@ module.exports = {
         ],
     },
     plugins: [
-        new HtmlWebpackPlugin({
-            template: "./index.html",
-            // Inject the js bundle at the end of the body of the given template
-            inject: "body",
-            chunks: ["main"],
-            favicon: "./src/assets/favicon.png",
-        }),
+        ...[].concat(
+            pages.map(
+                (page) =>
+                    new HtmlWebpackPlugin({
+                        inject: true,
+                        template: `./${page}.html`,
+                        filename: `${page}.html`,
+                        chunks: [page],
+                        favicon: "./src/assets/favicon.png",
+                    })
+            )
+        ),
         new CleanWebpackPlugin(buildPath),
         new ExtractTextPlugin("styles.[md5:contenthash:hex:20].css", {
             allChunks: true,

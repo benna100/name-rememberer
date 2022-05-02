@@ -2,9 +2,18 @@ const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
+const pages = ["index", "signup", "login", "network"];
+
 module.exports = {
     devtool: "eval-cheap-module-source-map",
-    entry: "./src/index.js",
+    entry: pages.reduce((config, page) => {
+        config[page] = `./src/${page}.js`;
+        return config;
+    }, {}),
+    output: {
+        filename: "[name].js",
+        path: path.resolve(__dirname, "dist"),
+    },
     devServer: {
         // access from mobile on same network
         //host: '192.168.1.1', <-- your ip here
@@ -72,10 +81,15 @@ module.exports = {
             },
         ],
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: "./index.html",
-            inject: true,
-        }),
-    ],
+    plugins: [].concat(
+        pages.map(
+            (page) =>
+                new HtmlWebpackPlugin({
+                    inject: true,
+                    template: `./${page}.html`,
+                    filename: `${page}.html`,
+                    chunks: [page],
+                })
+        )
+    ),
 };

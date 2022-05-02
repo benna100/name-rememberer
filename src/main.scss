@@ -104,18 +104,6 @@ input {
     border-radius: 8px;
 }
 
-.signup {
-    &.hidden {
-        display: none;
-    }
-}
-
-.login {
-    &.hidden {
-        display: none;
-    }
-}
-
 .popup-style {
     width: 300px;
     position: absolute;
@@ -182,6 +170,7 @@ section.popup-add-node {
 }
 
 /* CSS */
+a,
 button:not(.close) {
     align-items: center;
     appearance: none;
@@ -214,17 +203,20 @@ button:not(.close) {
     font-size: 18px;
 }
 
+a:focu,
 button:not(.close):focus {
     box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
 }
 
+a:hover,
 button:not(.close):hover {
     box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
     transform: translateY(-2px);
 }
 
+a:active,
 button:not(.close):active {
     box-shadow: #d6d6e7 0 3px 7px inset;
     transform: translateY(2px);
