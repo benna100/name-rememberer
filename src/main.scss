@@ -203,7 +203,7 @@ button:not(.close) {
     font-size: 18px;
 }
 
-a:focu,
+a:focus,
 button:not(.close):focus {
     box-shadow: #d6d6e7 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
@@ -225,4 +225,13 @@ button:not(.close):active {
 main #get-started {
     max-width: 300px;
     margin-bottom: 36px;
+}
+
+img {
+    width: 100%;
+
+    &.screenshot1,
+    &.screenshot2 {
+        margin-bottom: 36px;
+    }
 }
