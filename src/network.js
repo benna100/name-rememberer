@@ -32,7 +32,9 @@ const signOutButton = document.querySelector(".signout");
 signOutButton.addEventListener("click", async () => {
     await auth.signOut();
     alert("user logged out");
-    window.location = "/";
+    window.location = window.location.href.includes("localhost")
+        ? "/"
+        : "https://benna100.github.io/name-rememberer/";
 });
 
 onAuthStateChanged(auth, function (user) {
@@ -46,6 +48,9 @@ onAuthStateChanged(auth, function (user) {
     } else {
         alert("please login");
         window.location = "/login.html";
+        window.location.href.includes("localhost")
+            ? "/login.html"
+            : "https://benna100.github.io/name-rememberer/login.html";
     }
 });
 
