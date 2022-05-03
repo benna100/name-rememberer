@@ -36,9 +36,7 @@ signupButton.addEventListener("click", () => {
             // Signed in
             const user = userCredential.user;
             alert("user created 🎉 Redirecting to login");
-            window.location.href.includes("localhost")
-                ? "/login.html"
-                : "https://benna100.github.io/name-rememberer/login.html";
+            window.location = "/login.html";
         })
         .catch((error) => {
             const errorCode = error.code;

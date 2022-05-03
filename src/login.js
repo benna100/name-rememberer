@@ -34,9 +34,7 @@ loginButton.addEventListener("click", () => {
     const password = loginElement.querySelector("input.password").value;
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            window.location = window.location.href.includes("localhost")
-                ? "/network.html"
-                : "https://benna100.github.io/name-rememberer/network.html";
+            window.location = "/network.html";
         })
         .catch((error) => {
             const errorCode = error.code;
