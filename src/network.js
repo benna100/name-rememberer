@@ -1,3 +1,4 @@
+"use strict";
 import "./main.scss";
 
 import { initializeApp, firebase } from "firebase/app";

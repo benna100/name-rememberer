@@ -1,3 +1,4 @@
+"use strict";
 import "./main.scss";
 
 import { initializeApp, firebase } from "firebase/app";
@@ -34,7 +35,7 @@ loginButton.addEventListener("click", () => {
     const password = loginElement.querySelector("input.password").value;
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            window.location = "/network.html";
+            window.location = "network.html";
         })
         .catch((error) => {
             const errorCode = error.code;
