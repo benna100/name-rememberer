@@ -33,7 +33,7 @@ const signOutButton = document.querySelector(".signout");
 signOutButton.addEventListener("click", async () => {
     await auth.signOut();
     alert("user logged out");
-    window.location = "/";
+    window.location = "/name-rememberer";
 });
 
 onAuthStateChanged(auth, function (user) {
