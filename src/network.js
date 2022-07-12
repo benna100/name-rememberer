@@ -85,6 +85,8 @@ function populateSelectList(nodes) {
 let nodesDataset = [];
 let edgesDataset = [];
 
+let nodePositions = JSON.parse(localStorage.getItem("node-positions"));
+
 function checkAndGetData(accessToken) {
     fetch(`${login_url_base}/data`, {
         headers: {
@@ -107,6 +109,11 @@ function checkAndGetData(accessToken) {
                 };
                 if (color !== "") {
                     obj.color = color;
+                }
+
+                if (nodePositions) {
+                    obj.x = nodePositions[id].x;
+                    obj.y = nodePositions[id].y;
                 }
 
                 return obj;
@@ -154,32 +161,32 @@ function draw() {
                 background: "#fff",
             },
             font: { color: "#000" },
-            shapeProperties: {
-                useBorderWithImage: true,
-                interpolation: false, // 'true' for intensive zooming
-            },
+            // shapeProperties: {
+            //     useBorderWithImage: true,
+            //     interpolation: false, // 'true' for intensive zooming
+            // },
         },
         edges: {
             color: "lightgray",
-            smooth: {
-                type: "continuous",
-                roundness: 1,
-            },
-        },
-        layout: {
-            improvedLayout: false,
-        },
-        physics: {
-            solver: "forceAtlas2Based",
-            forceAtlas2Based: {
-                gravitationalConstant: -100,
-            },
-            // solver: "hierarchicalRepulsion",
-            // stabilization: {
-            //     iterations: 987,
-            //     updateInterval: 10,
+            // smooth: {
+            //     type: "continuous",
+            //     roundness: 1,
             // },
         },
+        // layout: {
+        //     improvedLayout: false,
+        // },
+        // physics: {
+        //     solver: "forceAtlas2Based",
+        //     forceAtlas2Based: {
+        //         gravitationalConstant: -100,
+        //     },
+        //     // solver: "hierarchicalRepulsion",
+        //     // stabilization: {
+        //     //     iterations: 987,
+        //     //     updateInterval: 10,
+        //     // },
+        // },
     };
 
     /*
@@ -205,6 +212,20 @@ function draw() {
 
     network.on("afterDrawing", () => {
         loading.style.display = "none";
+    });
+
+    network.on("stabilized", () => {
+        // save all node positions
+        let nodePositions = {};
+        nodesDataset.forEach(function (item) {
+            var positions = network.getPositions(item.id);
+
+            nodePositions[item.id] = {
+                x: positions[item.id].x,
+                y: positions[item.id].y,
+            };
+        });
+        localStorage.setItem("node-positions", JSON.stringify(nodePositions));
     });
 
     const popup = document.querySelector(".popup");
