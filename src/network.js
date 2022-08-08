@@ -95,6 +95,9 @@ function checkAndGetData(accessToken) {
         },
     })
         .then((resp) => resp.json())
+        .catch(() => {
+            alert("Fetching data failed 1");
+        })
         .then((resp) => {
             if (!resp.successful) {
                 return alert("wrong password");
@@ -111,7 +114,7 @@ function checkAndGetData(accessToken) {
                     obj.color = color;
                 }
 
-                if (nodePositions) {
+                if (nodePositions && nodePositions[id]) {
                     obj.x = nodePositions[id].x;
                     obj.y = nodePositions[id].y;
                 }
@@ -124,9 +127,6 @@ function checkAndGetData(accessToken) {
 
             draw();
             populateSelectList(nodesDataset.get());
-        })
-        .catch(() => {
-            alert("Fetching data failed 1");
         });
 }
 
