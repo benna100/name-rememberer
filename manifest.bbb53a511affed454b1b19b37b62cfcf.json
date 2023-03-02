@@ -1,0 +1,22 @@
+{
+  "icons": [
+    {
+      "src": "icon_512x512.738a913f614814cec95a34488efca71f.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_192x192.44f61d06d305d3fe988866476e263ae1.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "Easily remember names",
+  "short_name": "Remember names easily",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "https://benna100.github.io/name-rememberer/network.html",
+  "description": "NameName gives you an easy overview of the people whose name you want to remember",
+  "background_color": "#EA580C",
+  "scope": "."
+}
