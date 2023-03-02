@@ -231,7 +231,8 @@ function draw() {
 
     const popup = document.querySelector(".popup");
     const closePopupElement = popup.querySelector(".close");
-    const popupButton = popup.querySelector("button.update-node");
+    const popupButtonUpdateNode = popup.querySelector("button.update-node");
+    const popupButtonDeleteNode = popup.querySelector("button.delete-node");
 
     const popUpLabelElement = document.querySelector(".popup .label");
     const popUpImageElement = document.querySelector(".popup .image");
@@ -239,7 +240,8 @@ function draw() {
 
     const popupEdge = document.querySelector(".popup-edge");
     const closePopupEdgeElement = popupEdge.querySelector(".close");
-    const popupEdgeButton = popupEdge.querySelector("button.update-edge");
+    const popupButtonUpdateEdge = popupEdge.querySelector("button.update-edge");
+    const popupButtonDeleteEdge = popupEdge.querySelector("button.delete-edge");
 
     const popUpEdgeLabelElement = document.querySelector(".popup-edge .label");
     const popUpEdgeFromElement = document.querySelector(
@@ -247,7 +249,7 @@ function draw() {
     );
     const popUpEdgeToElement = document.querySelector(".popup-edge select.to");
 
-    popupButton.addEventListener("click", () => {
+    popupButtonUpdateNode.addEventListener("click", () => {
         const newNode = {
             id: selectedNodeId,
             label: popUpLabelElement.value,
@@ -274,7 +276,24 @@ function draw() {
             });
     });
 
-    popupEdgeButton.addEventListener("click", () => {
+    popupButtonDeleteNode.addEventListener("click", () => {
+        fetch(`${login_url_base}/node/${selectedNodeId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+                popup.classList.remove("visible");
+
+                updateSelectLists();
+                clearAllInputs();
+            });
+    });
+
+    popupButtonUpdateEdge.addEventListener("click", () => {
         const newEdge = {
             id: selectedEdgeId,
             from: popUpEdgeFromElement.value,
@@ -294,7 +313,22 @@ function draw() {
             .then((resp) => {
                 popupEdge.classList.remove("visible");
 
-                edges.updateOnly(newEdge);
+                updateSelectLists();
+                clearAllInputs();
+            });
+    });
+
+    popupButtonDeleteEdge.addEventListener("click", () => {
+        fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
+        })
+            .then((resp) => resp.json())
+            .then((resp) => {
+                popupEdge.classList.remove("visible");
 
                 updateSelectLists();
                 clearAllInputs();

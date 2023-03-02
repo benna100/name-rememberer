@@ -37,6 +37,8 @@ main {
         position: absolute;
         bottom: 36px;
         right: 12px;
+        border-radius: 100%;
+        padding-bottom: 3px;
 
         &.hidden {
             display: none;
