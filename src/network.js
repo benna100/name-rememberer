@@ -63,7 +63,8 @@ const login_url_base = window.location.host.includes("localhost")
 function populateSelectList(nodes) {
     const selects = document.querySelectorAll("select");
     selects.forEach((select) => {
-        const optionHtmlString = nodes
+        let optionHtmlString = `<option>None</option>`;
+        optionHtmlString += nodes
             .sort((a, b) => {
                 let fa = a.label.toLowerCase(),
                     fb = b.label.toLowerCase();
@@ -351,9 +352,13 @@ document
         const label = document.querySelector(".popup-add-node .label").value;
         const color = document.querySelector(".popup-add-node .color").value;
         const image = document.querySelector(".popup-add-node .image").value;
-        const connectedToId = document.querySelector(
+        const connectedToSelectList = document.querySelector(
             ".popup-add-node .connected-to"
-        ).value;
+        );
+        const connectedToId =
+            "value" in connectedToSelectList
+                ? connectedToSelectList.value
+                : undefined;
         const connectionLabel = document.querySelector(
             ".popup-add-node .connection-label"
         ).value;
@@ -363,7 +368,6 @@ document
             body: JSON.stringify({
                 label,
                 image,
-                firebaseUid: "asd",
                 color,
                 connectedToId,
                 connectionLabel,

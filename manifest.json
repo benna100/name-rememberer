@@ -1,0 +1,21 @@
+{
+    "short_name": "Flubi - share files",
+    "name": " Share text and files between devices",
+    "icons": [
+        {
+            "src": "https://i.imgur.com/koutcIe.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "https://i.imgur.com/RdJS1pR.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ],
+    "start_url": "https://benna100.github.io/name-rememberer/network.html",
+    "display": "standalone",
+    "description": "NameName gives you an easy overview of the people whose name you want to remember",
+    "background_color": "#EA580C",
+    "scope": "."
+}
