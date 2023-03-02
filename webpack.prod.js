@@ -6,6 +6,8 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const SocialTags = require("social-tags-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const WorkboxPlugin = require("workbox-webpack-plugin");
+var WebpackPwaManifest = require("webpack-pwa-manifest");
 
 const buildPath = path.resolve(__dirname, "dist");
 
@@ -143,6 +145,38 @@ module.exports = {
                 "twitter:description": appDescription,
                 "twitter:image": "./src/assets/social-twitter.png",
             },
+        }),
+        new WorkboxPlugin.GenerateSW({
+            // these options encourage the ServiceWorkers to get in there fast
+
+            // and not allow any straggling "old" SWs to hang around
+
+            clientsClaim: true,
+
+            skipWaiting: true,
+        }),
+        new WebpackPwaManifest({
+            short_name: "Remember names easily",
+            name: "Easily remember names",
+            icons: [
+                {
+                    src: "https://i.imgur.com/koutcIe.png",
+                    type: "image/png",
+                    sizes: "192x192",
+                },
+                {
+                    src: "https://i.imgur.com/RdJS1pR.png",
+                    type: "image/png",
+                    sizes: "512x512",
+                },
+            ],
+            start_url:
+                "https://benna100.github.io/name-rememberer/network.html",
+            display: "standalone",
+            description:
+                "NameName gives you an easy overview of the people whose name you want to remember",
+            background_color: "#EA580C",
+            scope: ".",
         }),
     ],
 };
