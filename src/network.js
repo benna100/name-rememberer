@@ -46,7 +46,8 @@ onAuthStateChanged(auth, function (user) {
         } catch (error) {}
     } else {
         alert("please login");
-        window.location = "/login.html";
+        window.location =
+            "https://benna100.github.io/name-rememberer/login.html";
     }
 });
 
