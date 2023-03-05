@@ -16,6 +16,6 @@
     "start_url": "https://benna100.github.io/name-rememberer/network.html",
     "display": "standalone",
     "description": "NameName gives you an easy overview of the people whose name you want to remember",
-    "background_color": "#EA580C",
+    "background_color": "#ffffff",
     "scope": "."
 }
