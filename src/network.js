@@ -289,6 +289,8 @@ function draw() {
             .then((resp) => {
                 popup.classList.remove("visible");
 
+                nodesDataset.remove(selectedNodeId);
+
                 updateSelectLists();
                 clearAllInputs();
             });
@@ -334,6 +336,8 @@ function draw() {
                 updateSelectLists();
                 clearAllInputs();
             });
+
+        edgesDataset.remove(selectedEdgeId);
     });
 
     closePopupElement.addEventListener("click", () =>
