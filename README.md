@@ -2,10 +2,12 @@
 
 ## Table of Contents
 
--   [About](#about)
--   [Getting Started](#getting_started)
--   [Usage](#usage)
--   [Contributing](../CONTRIBUTING.md)
+-   [Template Really Fuckong good](#template-really-fuckong-good)
+    -   [Table of Contents](#table-of-contents)
+    -   [About ](#about-)
+    -   [Getting Started ](#getting-started-)
+        -   [Installing](#installing)
+    -   [Usage ](#usage-)
 
 ## About <a name = "about"></a>
 
@@ -34,7 +36,7 @@ This template is for creating a vanilla js website with everything included like
 
 For development:
 
-`npm run dev`
+`npm run start`
 
 Access on `http://localhost:8080/`
 
@@ -45,3 +47,13 @@ For deploy to github pages:
 `npm run deploy`
 
 Main route can be found at `http://localhost:8080/network.html`
+
+Project hosted at firebase cloud functions!
+
+NVM version: `16.4.0`
+
+The authentication can only be done for `https://benna100.github.io/name-rememberer/`. Link to article her: https://medium.com/@devesu/how-to-secure-your-firebase-project-even-when-your-api-key-is-publicly-available-a462a2a58843
+
+Link to console here: https://console.cloud.google.com/apis/credentials/key/58c78e2d-cfc5-4fea-81a8-e30f96d691cb?project=name-rememberer-8ed08
+
+If developing localhost remove the restriction so you can log in localhost

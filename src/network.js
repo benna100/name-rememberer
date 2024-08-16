@@ -58,8 +58,8 @@ let selectedNodeId;
 let selectedEdgeId;
 
 const login_url_base = window.location.host.includes("localhost")
-    ? "http://localhost:5001/name-rememberer-8ed08/us-central1/app"
-    : "https://us-central1-name-rememberer-8ed08.cloudfunctions.net/app";
+    ? "http://localhost:3000"
+    : "https://name-rememberer-backend.onrender.com";
 
 function populateSelectList(nodes) {
     const selects = document.querySelectorAll("select");
@@ -85,6 +85,7 @@ function populateSelectList(nodes) {
 }
 
 let nodesDataset = [];
+let allNodes = [];
 let edgesDataset = [];
 
 let nodePositions = JSON.parse(localStorage.getItem("node-positions"));
@@ -127,8 +128,10 @@ function checkAndGetData(accessToken) {
             nodesDataset = new vis.DataSet(nodes);
             edgesDataset = new vis.DataSet(resp.data.edges);
 
+            allNodes = nodesDataset.get();
+
             draw();
-            populateSelectList(nodesDataset.get());
+            populateSelectList(allNodes);
         });
 }
 
@@ -272,6 +275,8 @@ function draw() {
 
                 nodesDataset.updateOnly(newNode);
 
+                allNodes = nodesDataset.get();
+
                 updateSelectLists();
                 clearAllInputs();
             });
@@ -290,6 +295,8 @@ function draw() {
                 popup.classList.remove("visible");
 
                 nodesDataset.remove(selectedNodeId);
+
+                allNodes = nodesDataset.get();
 
                 updateSelectLists();
                 clearAllInputs();
@@ -435,6 +442,8 @@ document
                     });
                 }
 
+                allNodes = nodesDataset.get();
+
                 addNode.classList.remove("visible");
 
                 updateSelectLists(resp.nodeCreated);
@@ -481,3 +490,44 @@ function clearAllInputs() {
         input.value = "";
     });
 }
+
+// Function to search and highlight nodes
+function searchNodes() {
+    const searchTerm = document.getElementById("searchBar").value.toLowerCase();
+    const searchLoading = document.getElementById("searchLoading");
+
+    // Show loading state
+    searchLoading.style.display = "inline";
+
+    setTimeout(() => {
+        // Reset the color of all nodes
+        const resetUpdates = allNodes.map((node) => {
+            return { id: node.id, color: node.originalColor || "#fff" };
+        });
+        nodesDataset.update(resetUpdates);
+
+        // If search term is empty, hide loading and return
+        if (searchTerm === "") {
+            searchLoading.style.display = "none";
+            return;
+        }
+
+        // Filter nodes based on the search term
+        const matchingNodes = allNodes.filter((node) =>
+            node.label.toLowerCase().includes(searchTerm)
+        );
+
+        // Highlight matching nodes
+        const highlightUpdates = matchingNodes.map((node) => {
+            node.originalColor = node.color; // Store original color
+            return { id: node.id, color: "#FFD700" }; // Highlight with a golden color
+        });
+        nodesDataset.update(highlightUpdates);
+
+        // Hide loading state after processing
+        searchLoading.style.display = "none";
+    }, 100); // Timeout for simulating loading state, adjust as necessary
+}
+
+// Bind the search function to the search button
+document.getElementById("searchButton").addEventListener("click", searchNodes);
