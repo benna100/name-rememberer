@@ -242,3 +242,17 @@ img {
         margin-bottom: 36px;
     }
 }
+
+.search {
+    position: absolute;
+    z-index: 1000;
+    display: flex;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+
+    input {
+        margin-right: 12px;
+        min-width: 0;
+    }
+}
