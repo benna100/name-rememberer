@@ -1,6 +1,8 @@
 "use strict";
 import "./main.scss";
 
+console.log("hello");
+
 import { initializeApp, firebase } from "firebase/app";
 import {
     getAuth,
@@ -18,6 +20,16 @@ const firebaseConfig = {
     messagingSenderId: "503135513537",
     appId: "1:503135513537:web:510a575730bd7febce5d40",
 };
+
+import {
+    db,
+    getData,
+    createNode,
+    updateNode,
+    deleteNode,
+    updateEdge,
+    deleteEdge,
+} from "./db";
 
 // Initialize Firebase
 
@@ -46,8 +58,9 @@ onAuthStateChanged(auth, function (user) {
         } catch (error) {}
     } else {
         alert("please login");
-        window.location =
-            "https://benna100.github.io/name-rememberer/login.html";
+
+        window.location = "http://localhost:8080/login.html";
+        //window.location = "https://benna100.github.io/name-rememberer/login.html";
     }
 });
 
@@ -91,47 +104,31 @@ let edgesDataset = [];
 let nodePositions = JSON.parse(localStorage.getItem("node-positions"));
 
 function checkAndGetData(accessToken) {
-    fetch(`${login_url_base}/data`, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-        },
-    })
-        .then((resp) => resp.json())
-        .catch(() => {
-            alert("Fetching data failed 1");
-        })
-        .then((resp) => {
-            if (!resp.successful) {
-                return alert("wrong password");
-            }
-
-            let nodes = resp.data.nodes.map(({ image, id, label, color }) => {
+    getData()
+        .then(({ nodes, edges }) => {
+            const processedNodes = nodes.map((n) => {
                 const obj = {
-                    id,
-                    image,
-                    label,
-                    shape: image !== "" ? "image" : "box",
+                    id: n.id,
+                    image: n.image,
+                    label: n.label,
+                    shape: n.image ? "image" : "box",
                 };
-                if (color !== "") {
-                    obj.color = color;
+                if (n.color) obj.color = n.color;
+                if (nodePositions && nodePositions[n.id]) {
+                    obj.x = nodePositions[n.id].x;
+                    obj.y = nodePositions[n.id].y;
                 }
-
-                if (nodePositions && nodePositions[id]) {
-                    obj.x = nodePositions[id].x;
-                    obj.y = nodePositions[id].y;
-                }
-
                 return obj;
             });
-
-            nodesDataset = new vis.DataSet(nodes);
-            edgesDataset = new vis.DataSet(resp.data.edges);
-
+            nodesDataset = new vis.DataSet(processedNodes);
+            edgesDataset = new vis.DataSet(edges);
             allNodes = nodesDataset.get();
-
             draw();
             populateSelectList(allNodes);
+        })
+        .catch((err) => {
+            console.error("Fetching data failed", err);
+            alert("Fetching data failed");
         });
 }
 
@@ -253,6 +250,54 @@ function draw() {
     );
     const popUpEdgeToElement = document.querySelector(".popup-edge select.to");
 
+    // When the user clicks the update button in the node popup:
+    document
+        .querySelector(".popup button.update-node")
+        .addEventListener("click", () => {
+            const newNode = {
+                label: document.querySelector(".popup .label").value,
+                image: document.querySelector(".popup .image").value,
+                color: document.querySelector(".popup .color").value,
+            };
+
+            updateNode(selectedNodeId, newNode)
+                .then((updatedNode) => {
+                    // Update your vis.js dataset accordingly
+                    nodesDataset.updateOnly({
+                        id: updatedNode.id,
+                        label: updatedNode.label,
+                        image: updatedNode.image,
+                        color: updatedNode.color,
+                    });
+                    // Optionally refresh your UI, update select lists, clear inputs, etc.
+                    document
+                        .querySelector(".popup")
+                        .classList.remove("visible");
+                })
+                .catch((err) => console.error("Update node failed:", err));
+        });
+
+    document
+        .querySelector(".popup-edge button.update-edge")
+        .addEventListener("click", () => {
+            const newEdge = {
+                from: document.querySelector(".popup-edge select.from").value,
+                to: document.querySelector(".popup-edge select.to").value,
+                label: document.querySelector(".popup-edge .label").value,
+            };
+
+            updateEdge(selectedEdgeId, newEdge)
+                .then((updatedEdge) => {
+                    // Optionally update your UI dataset if needed
+                    // For example, if using vis.js, you might update the dataset here.
+                    document
+                        .querySelector(".popup-edge")
+                        .classList.remove("visible");
+                })
+                .catch((err) => console.error("Update edge failed:", err));
+        });
+
+    /*
     popupButtonUpdateNode.addEventListener("click", () => {
         const newNode = {
             id: selectedNodeId,
@@ -281,7 +326,9 @@ function draw() {
                 clearAllInputs();
             });
     });
+    */
 
+    /*
     popupButtonDeleteNode.addEventListener("click", () => {
         fetch(`${login_url_base}/node/${selectedNodeId}`, {
             method: "DELETE",
@@ -302,7 +349,7 @@ function draw() {
                 clearAllInputs();
             });
     });
-
+    
     popupButtonUpdateEdge.addEventListener("click", () => {
         const newEdge = {
             id: selectedEdgeId,
@@ -327,6 +374,7 @@ function draw() {
                 clearAllInputs();
             });
     });
+    
 
     popupButtonDeleteEdge.addEventListener("click", () => {
         fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
@@ -346,6 +394,37 @@ function draw() {
 
         edgesDataset.remove(selectedEdgeId);
     });
+*/
+
+    document
+        .querySelector(".popup button.delete-node")
+        .addEventListener("click", () => {
+            deleteNode(selectedNodeId)
+                .then((deletedNode) => {
+                    // Remove the node from your vis.js dataset
+                    nodesDataset.remove(selectedNodeId);
+                    // Optionally update UI (like select lists) and close the popup
+                    document
+                        .querySelector(".popup")
+                        .classList.remove("visible");
+                })
+                .catch((err) => console.error("Delete node failed:", err));
+        });
+
+    // When the user clicks the delete button in the edge popup:
+    document
+        .querySelector(".popup-edge button.delete-edge")
+        .addEventListener("click", () => {
+            deleteEdge(selectedEdgeId)
+                .then((deletedEdge) => {
+                    // Remove the edge from your vis.js dataset
+                    edgesDataset.remove(selectedEdgeId);
+                    document
+                        .querySelector(".popup-edge")
+                        .classList.remove("visible");
+                })
+                .catch((err) => console.error("Delete edge failed:", err));
+        });
 
     closePopupElement.addEventListener("click", () =>
         popup.classList.remove("visible")
@@ -401,57 +480,48 @@ document
         const connectedToSelectList = document.querySelector(
             ".popup-add-node .connected-to"
         );
-        const connectedToId =
-            "value" in connectedToSelectList
-                ? connectedToSelectList.value
-                : undefined;
+        const connectedToId = connectedToSelectList.value || "None";
         const connectionLabel = document.querySelector(
             ".popup-add-node .connection-label"
         ).value;
 
-        fetch(`${login_url_base}/node`, {
-            method: "POST",
-            body: JSON.stringify({
-                label,
-                image,
-                color,
-                connectedToId,
-                connectionLabel,
-            }),
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
+        // Assuming your logged-in user is stored in a variable `user`
+        createNode({
+            label,
+            color,
+            image,
+            connectedToId,
+            connectionLabel,
         })
-            .then((resp) => resp.json())
-            .then((resp) => {
-                let { id, label, color, image } = resp.nodeCreated;
-
-                // yes i know this is a hack
-                if (color === "") {
-                    color = "#fff";
-                }
-                nodesDataset.add({ id, label, color, image });
-                if (resp.edgeCreated) {
-                    let { from, to } = resp.edgeCreated;
-
+            .then(({ node, edge }) => {
+                if (!node.color) node.color = "#fff";
+                nodesDataset.add({
+                    id: node.id,
+                    label: node.label,
+                    color: node.color,
+                    image: node.image,
+                });
+                if (edge) {
                     edgesDataset.add({
-                        from,
-                        to,
-                        label: resp.edgeCreated.label,
+                        id: edge.id,
+                        from: edge.from,
+                        to: edge.to,
+                        label: edge.label,
                     });
                 }
-
                 allNodes = nodesDataset.get();
-
-                addNode.classList.remove("visible");
-
-                updateSelectLists(resp.nodeCreated);
+                document
+                    .querySelector("section.popup-add-node")
+                    .classList.remove("visible");
+                updateSelectLists();
                 clearAllInputs();
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error("Node creation failed", err);
                 alert("Node creation failed");
-                addNode.classList.remove("visible");
+                document
+                    .querySelector("section.popup-add-node")
+                    .classList.remove("visible");
             });
     });
 
@@ -531,3 +601,119 @@ function searchNodes() {
 
 // Bind the search function to the search button
 document.getElementById("searchButton").addEventListener("click", searchNodes);
+
+// migrate data
+// migration.js
+
+// Helper: Splits a SQL tuple string (e.g., "1,'2022-04-12 20:56:53.262',...")
+// into an array of individual values. It avoids splitting commas within quotes.
+function splitSQLValues(str) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+    for (let i = 0; i < str.length; i++) {
+        const char = str[i];
+        if (char === "'" && (i === 0 || str[i - 1] !== "\\")) {
+            inQuotes = !inQuotes;
+            current += char;
+        } else if (char === "," && !inQuotes) {
+            result.push(current.trim());
+            current = "";
+        } else {
+            current += char;
+        }
+    }
+    if (current) result.push(current.trim());
+    return result;
+}
+
+// Helper: Removes wrapping quotes and unescapes simple escaped quotes.
+function stripQuotes(val) {
+    if (val.startsWith("'") && val.endsWith("'")) {
+        return val.slice(1, -1).replace(/\\'/g, "'");
+    }
+    return val;
+}
+
+// Helper: Converts a SQL datetime string into a Date object.
+// Replaces the space between date and time with a "T" for ISO format.
+function parseDate(str) {
+    const clean = stripQuotes(str);
+    return new Date(clean.replace(" ", "T"));
+}
+
+// The migration function takes SQL text, finds INSERT statements,
+// parses their values, and then inserts records into Dexie.
+async function migrateSQL(sqlText) {
+    // Regular expression to match INSERT statements.
+    // It captures the table name and the values part.
+    const insertRegex = /INSERT INTO\s+`(\w+)`\s+VALUES\s+(.+?);/gis;
+    let match;
+
+    while ((match = insertRegex.exec(sqlText)) !== null) {
+        const table = match[1].toLowerCase(); // "node" or "edge"
+        const valuesPart = match[2];
+
+        // Match individual tuples, e.g. (1, '2022-04-12 ...')
+        const tupleRegex = /\(([^)]+)\)/g;
+        let tupleMatch;
+        const rows = [];
+
+        while ((tupleMatch = tupleRegex.exec(valuesPart)) !== null) {
+            const rowString = tupleMatch[1];
+            const values = splitSQLValues(rowString);
+            rows.push(values);
+        }
+
+        // Process rows based on table name.
+        if (table === "node") {
+            // The original Node table columns order:
+            // id, createdAt, updatedAt, image, label, color, firebaseUid
+            // We ignore firebaseUid.
+            for (const row of rows) {
+                if (row.length < 6) continue;
+                const node = {
+                    id: parseInt(row[0], 10),
+                    createdAt: parseDate(row[1]),
+                    updatedAt: parseDate(row[2]),
+                    image: stripQuotes(row[3]),
+                    label: stripQuotes(row[4]),
+                    color: stripQuotes(row[5]),
+                };
+                // Use put to insert with an explicit primary key.
+                await db.nodes.put(node);
+            }
+        } else if (table === "edge") {
+            // The original Edge table columns order:
+            // id, createdAt, updatedAt, from, to, label, firebaseUid
+            // We ignore firebaseUid.
+            for (const row of rows) {
+                if (row.length < 6) continue;
+                const edge = {
+                    id: parseInt(row[0], 10),
+                    createdAt: parseDate(row[1]),
+                    updatedAt: parseDate(row[2]),
+                    from: parseInt(row[3], 10),
+                    to: parseInt(row[4], 10),
+                    label: stripQuotes(row[5]),
+                };
+                await db.edges.put(edge);
+            }
+        }
+    }
+}
+
+// Example usage: When a user clicks a "Migrate" button,
+// read the SQL text from a textarea and run the migration.
+console.log(document.querySelector("#migrate"));
+
+document.querySelector("#migrate").addEventListener("click", async () => {
+    const sqlText = document.querySelector("textarea").value;
+    try {
+        await migrateSQL(sqlText);
+        alert("Migration complete!");
+    } catch (err) {
+        console.error("Migration error:", err);
+        alert("Migration failed. See console for details.");
+    }
+});
