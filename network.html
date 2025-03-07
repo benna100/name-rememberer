@@ -44,9 +44,11 @@
             <span class="loading">Loading application</span>         
 
             <div class="search">
+                <!-- <label for="searchBar">Search for a name</label> -->
                 <input type="text" id="searchBar" placeholder="Search for a name...">
-                <button id="searchButton">Search</button>
-                <span id="searchLoading" style="display: none;">Searching...</span>
+                <div id="search-autocomplete" class="autocomplete"></div>
+
+                <!-- <span id="searchLoading" style="display: none;">Searching...</span> -->
             </div>
 
             <section class="network"></section>
@@ -62,9 +64,10 @@
 
                 <label for="image">Image</label>
                 <input class="image" id="image" placeholder="Add image" type="text" />
-
-                <label for="connected-to">Connected to</label>
-                <select id="connected-to" class="connected-to"></select>
+                
+                <label for="connected-to-input">Connected to</label>
+                <input id="connected-to-input" class="connected-to-input" type="text" placeholder="Search nodes...">
+                <div id="connected-to-autocomplete" class="autocomplete"></div>
 
                 <label for="connection-label">Connection label</label>
                 <input

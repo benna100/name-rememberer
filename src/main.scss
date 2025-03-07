@@ -1,15 +1,9 @@
 @import "../node_modules/css-reset-and-normalize/scss/reset-and-normalize.scss";
-
 @import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
+/* Global Styles */
 * {
     font-family: "Montserrat", sans-serif;
-    box-sizing: border-box;
-}
-
-body {
-}
-
-* {
     box-sizing: border-box;
 }
 
@@ -20,53 +14,47 @@ main {
 }
 
 body {
-    font-family: sans-serif;
     color: #1d2d35;
     background-color: #fff7eb;
-    font-family: "Montserrat", sans-serif;
     position: relative;
     min-height: 100vh;
 }
 
+/* Main Container */
 main {
-    > span {
-        margin-bottom: 12px;
-    }
-
-    > button.add-node {
-        position: absolute;
-        bottom: 36px;
-        right: 12px;
-        border-radius: 100%;
-        padding-bottom: 3px;
-
-        &.hidden {
-            display: none;
-        }
-    }
-
-    button.signout {
-        position: absolute;
-        bottom: 36px;
-        left: 12px;
-
-        &.hidden {
-            display: none;
-        }
-    }
+    position: relative;
 }
 
-section.dashboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
+main > span {
+    margin-bottom: 12px;
+}
+
+/* Buttons */
+button.add-node {
+    position: absolute;
+    bottom: 36px;
+    right: 12px;
+    border-radius: 100%;
+    padding-bottom: 3px;
+}
+
+button.signout {
+    position: absolute;
+    bottom: 36px;
+    left: 12px;
+}
+
+/* Network */
+.network {
+    width: 100vw;
+    height: 100vh;
 }
 
 .network.hidden {
     display: none;
 }
 
+/* Typography */
 h1,
 h2,
 h3,
@@ -79,8 +67,10 @@ h1 {
     font-size: 2.5rem;
     margin-bottom: 36px;
     line-height: 3.6rem;
+}
 
-    @media only screen and (max-device-width: 700px) {
+@media only screen and (max-device-width: 700px) {
+    h1 {
         font-size: 1.9rem;
         line-height: 2.5rem;
     }
@@ -100,37 +90,17 @@ h6 {
     margin-bottom: 12px;
 }
 
-input {
+/* Inputs and Selects */
+input,
+select {
     border: 1px solid rgb(32, 32, 32);
     padding: 6px;
     border-radius: 8px;
+    width: 100%;
+    margin-bottom: 12px;
 }
 
-.popup-style {
-    width: 300px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 24px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 6px 8px 0 rgba(163, 163, 163, 0.21);
-    z-index: 100;
-
-    select,
-    input {
-        display: block;
-        width: 100%;
-        margin-bottom: 12px;
-    }
-
-    label {
-        margin-bottom: 6px;
-        display: block;
-    }
-}
-
+/* Popups */
 section.popup,
 section.popup-edge,
 section.popup-add-node {
@@ -145,38 +115,32 @@ section.popup-add-node {
     display: none;
     box-shadow: 0 6px 8px 0 rgba(163, 163, 163, 0.21);
     z-index: 100;
-
-    &.visible {
-        display: block;
-    }
-
-    select,
-    input {
-        display: block;
-        width: 100%;
-        margin-bottom: 12px;
-    }
-
-    label {
-        margin-bottom: 6px;
-        display: block;
-    }
-
-    button.close {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background-color: transparent;
-        border: none;
-    }
-
-    .update-node,
-    .update-edge {
-        float: right;
-    }
 }
 
-/* CSS */
+section.popup.visible,
+section.popup-edge.visible,
+section.popup-add-node.visible {
+    display: block;
+}
+
+section.popup label,
+section.popup-edge label,
+section.popup-add-node label {
+    margin-bottom: 6px;
+    display: block;
+}
+
+section.popup button.close,
+section.popup-edge button.close,
+section.popup-add-node button.close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: transparent;
+    border: none;
+}
+
+/* Specific Button Styles */
 a,
 button:not(.close) {
     align-items: center;
@@ -186,7 +150,6 @@ button:not(.close) {
     border-width: 0;
     box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
         rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #d6d6e7 0 -3px 0 inset;
-    box-sizing: border-box;
     color: #36395a;
     cursor: pointer;
     display: inline-flex;
@@ -194,19 +157,10 @@ button:not(.close) {
     height: 48px;
     justify-content: center;
     line-height: 1;
-    list-style: none;
-    overflow: hidden;
-    padding-left: 16px;
-    padding-right: 16px;
-    position: relative;
-    text-align: left;
+    padding: 0 16px;
     text-decoration: none;
     transition: box-shadow 0.15s, transform 0.15s;
     user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    will-change: box-shadow, transform;
     font-size: 18px;
 }
 
@@ -229,20 +183,7 @@ button:not(.close):active {
     transform: translateY(2px);
 }
 
-main #get-started {
-    max-width: 300px;
-    margin-bottom: 36px;
-}
-
-img {
-    width: 100%;
-
-    &.screenshot1,
-    &.screenshot2 {
-        margin-bottom: 36px;
-    }
-}
-
+/* Search Bar */
 .search {
     position: absolute;
     z-index: 1000;
@@ -250,9 +191,55 @@ img {
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
+}
 
-    input {
-        margin-right: 12px;
-        min-width: 0;
-    }
+.search input {
+    margin-right: 12px;
+    min-width: 0;
+}
+
+/* Autocomplete Container Styles */
+.autocomplete-container {
+    position: absolute;
+    z-index: 101;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.autocomplete-container .autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.autocomplete-container .autocomplete-item:hover {
+    background-color: #f0f0f0;
+}
+
+/* Specific Containers for Connected-To and Search Autocomplete */
+#connected-to-autocomplete,
+#search-autocomplete {
+    position: absolute;
+    z-index: 101;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
+    top: 52px;
+}
+
+#connected-to-autocomplete .autocomplete-item,
+#search-autocomplete .autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#connected-to-autocomplete .autocomplete-item:hover,
+#search-autocomplete .autocomplete-item:hover {
+    background-color: #f0f0f0;
 }
