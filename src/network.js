@@ -163,53 +163,12 @@ function draw() {
                 background: "#fff",
             },
             font: { color: "#000" },
-            // shapeProperties: {
-            //     useBorderWithImage: true,
-            //     interpolation: false, // 'true' for intensive zooming
-            // },
         },
         edges: {
             color: "lightgray",
-            // smooth: {
-            //     type: "continuous",
-            //     roundness: 1,
-            // },
         },
-        // layout: {
-        //     improvedLayout: false,
-        // },
-        // physics: {
-        //     solver: "forceAtlas2Based",
-        //     forceAtlas2Based: {
-        //         gravitationalConstant: -100,
-        //     },
-        //     // solver: "hierarchicalRepulsion",
-        //     // stabilization: {
-        //     //     iterations: 987,
-        //     //     updateInterval: 10,
-        //     // },
-        // },
     };
 
-    /*
-    //physics: { stabilization: false },
-        physics: {
-            solver: "forceAtlas2Based",
-            forceAtlas2Based: {
-                gravitationalConstant: -8000,
-                springConstant: 0.04,
-                springLength: 95,
-            },
-            adaptiveTimestep: true,
-            stabilization: {
-                iterations: 987,
-                updateInterval: 10,
-            },
-        },
-        layout: {
-            improvedLayout: true,
-        },
-    */
     const network = new vis.Network(container, data, options);
 
     network.on("afterDrawing", () => {
@@ -296,105 +255,6 @@ function draw() {
                 })
                 .catch((err) => console.error("Update edge failed:", err));
         });
-
-    /*
-    popupButtonUpdateNode.addEventListener("click", () => {
-        const newNode = {
-            id: selectedNodeId,
-            label: popUpLabelElement.value,
-            image: popUpImageElement.value,
-            color: popUpColorElement.value,
-        };
-
-        fetch(`${login_url_base}/node/${selectedNodeId}`, {
-            method: "PUT",
-            body: JSON.stringify(newNode),
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((resp) => {
-                popup.classList.remove("visible");
-
-                nodesDataset.updateOnly(newNode);
-
-                allNodes = nodesDataset.get();
-
-                updateSelectLists();
-                clearAllInputs();
-            });
-    });
-    */
-
-    /*
-    popupButtonDeleteNode.addEventListener("click", () => {
-        fetch(`${login_url_base}/node/${selectedNodeId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((resp) => {
-                popup.classList.remove("visible");
-
-                nodesDataset.remove(selectedNodeId);
-
-                allNodes = nodesDataset.get();
-
-                updateSelectLists();
-                clearAllInputs();
-            });
-    });
-    
-    popupButtonUpdateEdge.addEventListener("click", () => {
-        const newEdge = {
-            id: selectedEdgeId,
-            from: popUpEdgeFromElement.value,
-            to: popUpEdgeToElement.value,
-            label: popUpEdgeLabelElement.value,
-        };
-
-        fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
-            method: "PUT",
-            body: JSON.stringify(newEdge),
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((resp) => {
-                popupEdge.classList.remove("visible");
-
-                updateSelectLists();
-                clearAllInputs();
-            });
-    });
-    
-
-    popupButtonDeleteEdge.addEventListener("click", () => {
-        fetch(`${login_url_base}/edge/${selectedEdgeId}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then((resp) => resp.json())
-            .then((resp) => {
-                popupEdge.classList.remove("visible");
-
-                updateSelectLists();
-                clearAllInputs();
-            });
-
-        edgesDataset.remove(selectedEdgeId);
-    });
-*/
 
     document
         .querySelector(".popup button.delete-node")
