@@ -1,4 +1,5 @@
 import { db } from "./../db.js";
+import { getData } from "../db.js";
 
 // Helper: Splits a SQL tuple string into an array of individual values.
 function splitSQLValues(str) {
@@ -96,4 +97,43 @@ export function setupMigration() {
             alert("Migration failed. See console for details.");
         }
     });
+}
+
+export async function exportData() {
+    try {
+        const data = await getData();
+        const jsonData = JSON.stringify(data, null, 2);
+        const blob = new Blob([jsonData], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "data_export.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    } catch (err) {
+        console.error("Export data failed", err);
+    }
+}
+
+// New function: Imports data from a JSON string and populates the database.
+export async function importData(jsonText) {
+    try {
+        const data = JSON.parse(jsonText);
+        if (data.nodes && Array.isArray(data.nodes)) {
+            for (const node of data.nodes) {
+                await db.nodes.put(node);
+            }
+        }
+        if (data.edges && Array.isArray(data.edges)) {
+            for (const edge of data.edges) {
+                await db.edges.put(edge);
+            }
+        }
+        alert("Data import complete!");
+    } catch (err) {
+        console.error("Import data failed", err);
+        alert("Data import failed. See console for details.");
+    }
 }

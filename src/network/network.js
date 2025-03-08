@@ -88,19 +88,23 @@ function drawNetwork() {
     });
 
     network.on("click", function (params) {
-        const clickedNodeId = params.nodes[0];
-        const clickedEdgeId = params.edges[0];
-
-        if (clickedNodeId !== undefined) {
-            const nodeData = network.body.nodes[clickedNodeId].options;
+        // Use the dataset to get node/edge data
+        if (params.nodes && params.nodes.length > 0) {
+            const clickedNodeId = params.nodes[0];
+            const nodeData = nodesDataset.get(clickedNodeId);
             window.dispatchEvent(
                 new CustomEvent("nodeClick", {
                     detail: { id: clickedNodeId, data: nodeData },
                 })
             );
         }
-        if (clickedEdgeId !== undefined && clickedNodeId === undefined) {
-            const edgeData = network.body.edges[clickedEdgeId].options;
+        if (
+            params.edges &&
+            params.edges.length > 0 &&
+            (!params.nodes || params.nodes.length === 0)
+        ) {
+            const clickedEdgeId = params.edges[0];
+            const edgeData = edgesDataset.get(clickedEdgeId);
             window.dispatchEvent(
                 new CustomEvent("edgeClick", {
                     detail: { id: clickedEdgeId, data: edgeData },

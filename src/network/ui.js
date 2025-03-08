@@ -12,6 +12,7 @@ import {
     allNodes,
     networkInstance,
 } from "./network.js";
+import { exportData, importData } from "../network/migration.js"; // Updated import: added importData
 
 let selectedNodeId;
 let selectedEdgeId;
@@ -24,6 +25,28 @@ export function setupUI() {
     setupAddNodeListener();
     setupConnectedToAutocomplete(); // initialize autocomplete for "Connected to" field
     setupSearchAutocomplete(); // initialize autocomplete for search bar
+    setupSettingsToggle(); // added setting panel toggle
+    setupExportData(); // attach export button listener
+    setupImportData(); // Added: attach import button functionality
+}
+
+// Add this helper function near the top (after your imports)
+function getRandomConnectionName(node) {
+    // Ensure edgesDataset is available; use the complete list from edgesDataset
+    const allEdges = edgesDataset.get();
+    // Find edges where node is involved.
+    const relevantEdges = allEdges.filter(
+        (edge) => edge.from === node.id || edge.to === node.id
+    );
+    if (relevantEdges.length === 0) return undefined;
+    // Pick one random edge.
+    const randomEdge =
+        relevantEdges[Math.floor(Math.random() * relevantEdges.length)];
+    // Determine the other node id.
+    const otherNodeId =
+        randomEdge.from === node.id ? randomEdge.to : randomEdge.from;
+    const otherNode = nodesDataset.get(otherNodeId);
+    return otherNode ? otherNode.label : undefined;
 }
 
 function setupPopupEventListeners() {
@@ -33,15 +56,13 @@ function setupPopupEventListeners() {
     // Close popups
     popup
         .querySelector(".close")
-        .addEventListener("click", () => popup.classList.remove("visible"));
+        .addEventListener("click", () => popup.classList.add("hidden"));
     popupEdge
         .querySelector(".close")
-        .addEventListener("click", () => popupEdge.classList.remove("visible"));
+        .addEventListener("click", () => popupEdge.classList.add("hidden"));
     document
         .querySelector("section.popup-add-node button.close")
-        .addEventListener("click", () =>
-            addNodePopup.classList.remove("visible")
-        );
+        .addEventListener("click", () => addNodePopup.classList.add("hidden"));
 
     // Update node
     popup.querySelector("button.update-node").addEventListener("click", () => {
@@ -57,9 +78,9 @@ function setupPopupEventListeners() {
                     id: updatedNode.id,
                     label: updatedNode.label,
                     image: updatedNode.image,
-                    color: updatedNode.color,
+                    color: null,
                 });
-                popup.classList.remove("visible");
+                popup.classList.add("hidden");
             })
             .catch((err) => console.error("Update node failed:", err));
     });
@@ -69,7 +90,7 @@ function setupPopupEventListeners() {
         deleteNode(selectedNodeId)
             .then(() => {
                 nodesDataset.remove(selectedNodeId);
-                popup.classList.remove("visible");
+                popup.classList.add("hidden");
             })
             .catch((err) => console.error("Delete node failed:", err));
     });
@@ -86,7 +107,7 @@ function setupPopupEventListeners() {
 
             updateEdge(selectedEdgeId, newEdge)
                 .then(() => {
-                    popupEdge.classList.remove("visible");
+                    popupEdge.classList.add("hidden");
                 })
                 .catch((err) => console.error("Update edge failed:", err));
         });
@@ -98,7 +119,7 @@ function setupPopupEventListeners() {
             deleteEdge(selectedEdgeId)
                 .then(() => {
                     edgesDataset.remove(selectedEdgeId);
-                    popupEdge.classList.remove("visible");
+                    popupEdge.classList.add("hidden");
                 })
                 .catch((err) => console.error("Delete edge failed:", err));
         });
@@ -108,7 +129,7 @@ function setupAddNodeListener() {
     document
         .querySelector("main > button.add-node")
         .addEventListener("click", () => {
-            addNodePopup.classList.add("visible");
+            addNodePopup.classList.remove("hidden");
         });
 
     document
@@ -155,12 +176,12 @@ function setupAddNodeListener() {
                     // Clear the autocomplete field and reset selection
                     updateConnectedToInput();
                     clearAllInputs();
-                    addNodePopup.classList.remove("visible");
+                    addNodePopup.classList.add("hidden");
                 })
                 .catch((err) => {
                     console.error("Node creation failed", err);
                     alert("Node creation failed");
-                    addNodePopup.classList.remove("visible");
+                    addNodePopup.classList.add("hidden");
                 });
         });
 }
@@ -173,6 +194,7 @@ function updateConnectedToInput() {
     selectedConnectedToId = null;
 }
 
+// Update Connected To Autocomplete
 function setupConnectedToAutocomplete() {
     const input = document.getElementById("connected-to-input");
     const autocompleteContainer = document.getElementById(
@@ -196,8 +218,12 @@ function setupConnectedToAutocomplete() {
         );
         suggestions.forEach((node) => {
             const item = document.createElement("div");
-            item.classList.add("autocomplete-item");
-            item.textContent = node.label;
+            item.classList.add("autocomplete-item", "p-2", "cursor-pointer");
+            const randomConn = getRandomConnectionName(node);
+            // If a connection is found, show "Name -> Connection"
+            item.textContent = randomConn
+                ? `${node.label} -> ${randomConn}`
+                : node.label;
             item.dataset.id = node.id;
             item.addEventListener("click", () => {
                 input.value = node.label;
@@ -216,6 +242,7 @@ function setupConnectedToAutocomplete() {
     });
 }
 
+// Update Search Autocomplete similarly:
 function setupSearchAutocomplete() {
     const searchInput = document.getElementById("searchBar");
     const searchAutocompleteContainer = document.getElementById(
@@ -232,29 +259,47 @@ function setupSearchAutocomplete() {
     searchInput.addEventListener("input", function () {
         const query = searchInput.value.trim().toLowerCase();
         searchAutocompleteContainer.innerHTML = "";
-        if (!query) return;
-        // Filter nodes based on the query
+        // Hide container if there's no query.
+        if (!query) {
+            searchAutocompleteContainer.style.display = "none";
+            return;
+        }
+        // Filter nodes based on the query.
         const suggestions = allNodes.filter((node) =>
             node.label.toLowerCase().includes(query)
         );
-        suggestions.forEach((node) => {
-            const item = document.createElement("div");
-            item.classList.add("autocomplete-item");
-            item.textContent = node.label;
-            item.dataset.id = node.id;
-            item.addEventListener("click", () => {
-                searchInput.value = node.label;
-                searchAutocompleteContainer.innerHTML = "";
-                zoomToNode(node.id);
+        // If no suggestions, hide container.
+        if (suggestions.length === 0) {
+            searchAutocompleteContainer.style.display = "none";
+        } else {
+            searchAutocompleteContainer.style.display = "block";
+            suggestions.forEach((node) => {
+                const item = document.createElement("div");
+                item.classList.add(
+                    "autocomplete-item",
+                    "p-2",
+                    "cursor-pointer"
+                );
+                const randomConn = getRandomConnectionName(node);
+                item.textContent = randomConn
+                    ? `${node.label} -> ${randomConn}`
+                    : node.label;
+                item.dataset.id = node.id;
+                item.addEventListener("click", () => {
+                    searchInput.value = node.label;
+                    searchAutocompleteContainer.innerHTML = "";
+                    zoomToNode(node.id);
+                });
+                searchAutocompleteContainer.appendChild(item);
             });
-            searchAutocompleteContainer.appendChild(item);
-        });
+        }
     });
 
-    // Hide suggestions when clicking outside the search input
+    // Hide suggestions when clicking outside the search input.
     document.addEventListener("click", function (e) {
         if (e.target !== searchInput) {
             searchAutocompleteContainer.innerHTML = "";
+            searchAutocompleteContainer.style.display = "none";
         }
     });
 }
@@ -280,6 +325,63 @@ function clearAllInputs() {
     });
 }
 
+// New function: Setup settings panel toggle functionality
+function setupSettingsToggle() {
+    const settingsBtn = document.getElementById("settings-btn");
+    const closeSettings = document.getElementById("close-settings");
+    const settingsPanel = document.getElementById("settings-panel");
+    console.log(settingsBtn, closeSettings, settingsPanel);
+    if (settingsBtn && closeSettings && settingsPanel) {
+        settingsBtn.addEventListener("click", () => {
+            settingsPanel.classList.remove("translate-x-full");
+        });
+        closeSettings.addEventListener("click", () => {
+            settingsPanel.classList.add("translate-x-full");
+        });
+    }
+}
+
+// New function: Setup export data functionality
+function setupExportData() {
+    const exportDataBtn = document.getElementById("export-data");
+    if (exportDataBtn) {
+        exportDataBtn.addEventListener("click", () => {
+            exportData();
+        });
+    } else {
+        console.warn("Export Data button not found in the DOM.");
+    }
+}
+
+// New function: Setup import data functionality.
+function setupImportData() {
+    const importDataBtn = document.getElementById("import-data");
+    const importFileInput = document.getElementById("import-file");
+    if (importDataBtn && importFileInput) {
+        importDataBtn.addEventListener("click", () => {
+            importFileInput.click();
+        });
+        importFileInput.addEventListener("change", (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (event) => {
+                    try {
+                        await importData(event.target.result);
+                        // Optionally refresh UI here if needed.
+                    } catch (err) {
+                        console.error("Import data failed", err);
+                        alert("Import data failed. See console for details.");
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    } else {
+        console.warn("Import Data button or file input not found in the DOM.");
+    }
+}
+
 // External functions for node/edge popups
 export function setSelectedNode(id) {
     selectedNodeId = id;
@@ -291,7 +393,7 @@ export function setSelectedNode(id) {
         popup.querySelector(".color").value = node.color
             ? node.color.background || node.color
             : "";
-        popup.classList.add("visible");
+        popup.classList.remove("hidden");
     }
 }
 
@@ -301,7 +403,7 @@ export function setSelectedEdge(id, edgeData) {
     popupEdge.querySelector("select.from").value = edgeData.from || "";
     popupEdge.querySelector("select.to").value = edgeData.to || "";
     popupEdge.querySelector(".label").value = edgeData.label || "";
-    popupEdge.classList.add("visible");
+    popupEdge.classList.remove("hidden");
 }
 
 // Listen for custom events dispatched from network.js for node and edge clicks.

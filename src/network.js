@@ -1,5 +1,5 @@
 "use strict";
-import "./main.scss";
+//import "./main.scss";
 import { auth, onAuthStateChanged, signOut } from "./network/firebase.js";
 import { initializeNetwork } from "./network/network.js";
 import { setupUI } from "./network/ui.js";
@@ -13,7 +13,9 @@ document.querySelector(".signout").addEventListener("click", async () => {
 });
 
 initializeNetwork();
-setupUI();
+document.addEventListener("DOMContentLoaded", () => {
+    setupUI();
+});
 
 // On auth state change, initialize app
 // onAuthStateChanged(auth, (user) => {
