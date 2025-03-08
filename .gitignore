@@ -3,3 +3,4 @@
 /dist
 .env
 /src/data/vaccination
+name-rememberer-dump-navne-husk.sql
