@@ -2,7 +2,7 @@ const path = require("path");
 
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const pages = ["index", "signup", "login", "network"];
+const pages = ["index", "signup", "login", "network", "quiz"];
 
 module.exports = {
     devtool: "eval-cheap-module-source-map",

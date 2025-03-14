@@ -17,7 +17,7 @@ const appDescription = "Få et godt overblik over dit netværk";
 
 const CnameWebpackPlugin = require("cname-webpack-plugin");
 
-const pages = ["index", "signup", "login", "network"];
+const pages = ["index", "signup", "login", "network", "quiz"];
 
 module.exports = {
     devtool: "source-map",
