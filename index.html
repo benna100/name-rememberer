@@ -4,17 +4,17 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <!-- Mobile header color for Chrome, Firefox OS and Opera -->
-        <meta name="theme-color" content="#ff4970" />
+        <meta name="theme-color" content="#6366f1" />
         <!-- Mobile header color Windows Phone -->
-        <meta name="msapplication-navbutton-color" content="#ff4970" />
-        <!-- Mobile header color for iOS Safari (supports black, black-translucent or default) -->
+        <meta name="msapplication-navbutton-color" content="#6366f1" />
+        <!-- Mobile header color for iOS Safari -->
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link
-            href="https://unpkg.com/tailwindcss@2.0.2/dist/tailwind.min.css"
+            href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
             rel="stylesheet"
         />
         <link
-            href="https://fonts.googleapis.com/css?family=Open+Sans:400,800"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
         />
 
@@ -25,221 +25,368 @@
 
         <style type="text/css">
             body {
-                font: 10pt arial;
-                padding: 0px;
-                margin: 0px;
+                font-family: "Inter", sans-serif;
             }
             .network {
                 width: 100vw;
                 height: 100vh;
             }
+            .gradient-text {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                background-image: linear-gradient(to right, #6366f1, #8b5cf6);
+            }
+            .hero-pattern {
+                background-color: #f9fafb;
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            }
+            .screenshot-container img {
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+                border-radius: 0.5rem;
+                transition: transform 0.3s ease-in-out;
+            }
+            .screenshot-container img:hover {
+                transform: scale(1.02);
+            }
         </style>
         <!-- Primary Meta Tags -->
-        <title>Name rememberer - remember peoples names</title>
+        <title>NameName - Stop Forgetting People's Names</title>
         <meta
             name="description"
-            content="Få et hurtigt overblik. Det er nemt og simpelt!"
+            content="Visualize your network and never forget names again. Easy and simple!"
         />
     </head>
 
-    <body>
-        <main>
-            <section class="dashboard">
-                <div
-                    class="px-4 py-16 mx-auto w-full md:px-24 lg:px-8 lg:py-16 bg-gray-200"
-                >
-                    <div class="max-w-xl sm:mx-auto lg:max-w-2xl">
-                        <div class="flex flex-col mb-16 sm:text-center sm:mb-0">
-                            <div
-                                class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12"
-                            >
-                                <h1
-                                    class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto"
-                                >
-                                    <span class="relative inline-block"
-                                        ><svg
-                                            viewBox="0 0 52 24"
-                                            fill="currentColor"
-                                            class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
-                                        >
-                                            <defs>
-                                                <pattern
-                                                    id="e77df901-b9d7-4b9b-822e-16b2d410795b"
-                                                    x="0"
-                                                    y="0"
-                                                    width=".135"
-                                                    height=".30"
-                                                >
-                                                    <circle
-                                                        cx="1"
-                                                        cy="1"
-                                                        r=".7"
-                                                    ></circle>
-                                                </pattern>
-                                            </defs>
-                                            <rect
-                                                fill="url(#e77df901-b9d7-4b9b-822e-16b2d410795b)"
-                                                width="52"
-                                                height="24"
-                                            ></rect></svg
-                                    ></span>
-                                    Stop forgetting people's names.
-                                </h1>
-                                <h2 class="text-base text-gray-700 md:text-lg">
-                                    Visualize all the people you know and easily
-                                    find them again with NameName.
-                                </h2>
-                            </div>
-                            <div>
-                                <a
-                                    class="try-for-free"
-                                    href="signup.html"
-                                    draggable="false"
-                                >
-                                    Try it for free
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div
-                    class="px-4 py-16 mx-auto w-full md:px-24 lg:px-8 lg:py-20 bg-white"
-                >
-                    <div
-                        class="p-8 rounded shadow-xl sm:p-16 max-w-6xl mx-auto"
-                    >
-                        <div class="flex flex-col lg:flex-row">
-                            <div class="mb-6 lg:mb-0 lg:w-1/2 lg:pr-5">
-                                <h3
-                                    class="font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none"
-                                >
-                                    Finally, remembering names is a piece of
-                                    cake.
-                                </h3>
-                            </div>
-                            <div class="lg:w-1/2">
-                                <p class="mb-4 text-base text-gray-700">
-                                    You can use NameName to save friends, family
-                                    members or coworkers. The interface is
-                                    intuitive and easy-to-use so even people who
-                                    are not tech savvy will find it
-                                    straightforward.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!----><!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <!---->
-                <div
-                    class="px-4 py-16 mx-auto w-full bg-white md:px-24 lg:px-8 lg:py-20"
-                >
-                    <div
-                        class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12"
-                    >
-                        <h4
-                            class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto"
+    <body class="bg-gray-50">
+        <!-- Navbar -->
+        <nav class="bg-white shadow-sm py-4">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center">
+                    <div class="flex-shrink-0">
+                        <span class="text-xl font-bold text-indigo-600"
+                            >NameName</span
                         >
-                            How It Works.
-                        </h4>
-                        <p class="text-base text-gray-700 md:text-lg">
+                    </div>
+                    <div class="hidden md:block">
+                        <div class="ml-10 flex items-baseline space-x-4">
+                            <a
+                                href="#features"
+                                class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                                >Features</a
+                            >
+                            <a
+                                href="#how-it-works"
+                                class="text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium"
+                                >How It Works</a
+                            >
+                            <a
+                                href="signup.html"
+                                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-150 ease-in-out"
+                                >Sign Up</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero-pattern">
+                <div class="px-4 py-20 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <h1
+                            class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
+                        >
+                            <span class="block">Stop forgetting</span>
+                            <span class="block gradient-text"
+                                >people's names.</span
+                            >
+                        </h1>
+                        <p
+                            class="mt-3 max-w-md mx-auto text-base text-gray-600 sm:text-lg md:mt-5 md:text-xl"
+                        >
+                            Visualize all the people you know and easily find
+                            them again with NameName.
+                        </p>
+                        <div class="mt-10">
+                            <a
+                                href="signup.html"
+                                class="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10 transition duration-150 ease-in-out shadow-md hover:shadow-lg"
+                            >
+                                Try it for free
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Section -->
+            <section id="features" class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <div class="px-6 py-12 sm:px-12 lg:px-16">
+                            <div
+                                class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+                            >
+                                <div>
+                                    <h2
+                                        class="text-3xl font-bold text-gray-900 sm:text-4xl"
+                                    >
+                                        Finally, remembering names is a piece of
+                                        cake.
+                                    </h2>
+                                    <p class="mt-4 text-lg text-gray-600">
+                                        You can use NameName to save friends,
+                                        family members or coworkers. The
+                                        interface is intuitive and easy-to-use
+                                        so even people who are not tech savvy
+                                        will find it straightforward.
+                                    </p>
+                                    <div class="mt-8">
+                                        <div class="flex items-center">
+                                            <svg
+                                                class="h-5 w-5 text-green-500"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                            <span class="ml-2 text-gray-700"
+                                                >Simple visual network</span
+                                            >
+                                        </div>
+                                        <div class="mt-3 flex items-center">
+                                            <svg
+                                                class="h-5 w-5 text-green-500"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                            <span class="ml-2 text-gray-700"
+                                                >Add photos to remember
+                                                faces</span
+                                            >
+                                        </div>
+                                        <div class="mt-3 flex items-center">
+                                            <svg
+                                                class="h-5 w-5 text-green-500"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 20 20"
+                                                fill="currentColor"
+                                            >
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                    clip-rule="evenodd"
+                                                />
+                                            </svg>
+                                            <span class="ml-2 text-gray-700"
+                                                >Create connections between
+                                                people</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <img
+                                        class="rounded-lg shadow-lg object-cover"
+                                        src="https://github.com/benna100/name-rememberer/blob/master/src/assets/screenshot.PNG?raw=true"
+                                        alt="Network visualization"
+                                    />
+                                    <div
+                                        class="absolute -bottom-4 -right-4 bg-indigo-500 rounded-full w-24 h-24 flex items-center justify-center text-white font-bold"
+                                    >
+                                        <span>Easy<br />to use</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section id="how-it-works" class="py-16 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center">
+                        <h2
+                            class="text-3xl font-bold text-gray-900 sm:text-4xl"
+                        >
+                            How It Works
+                        </h2>
+                        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-600">
                             NameName gives you an easy overview of the people
                             you want to remember. You can save their name and
                             add an image to each person.
                         </p>
                     </div>
-                    <div
-                        class="max-w-6xl mx-auto grid gap-8 row-gap-8 lg:grid-cols-3"
-                    >
-                        <div class="sm:text-center">
+
+                    <div class="mt-16">
+                        <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
                             <div
-                                class="flex items-center justify-center w-24 h-24 mb-4 text-5xl font-extrabold rounded-full text-indigo-500 bg-indigo-100 sm:mx-auto"
+                                class="bg-white rounded-lg shadow-md p-8 text-center hover:shadow-lg transition-shadow duration-300"
                             >
-                                1
+                                <div
+                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 text-xl font-bold"
+                                >
+                                    1
+                                </div>
+                                <h3
+                                    class="mt-6 text-lg font-medium text-gray-900"
+                                >
+                                    Signup
+                                </h3>
+                                <p class="mt-2 text-base text-gray-600">
+                                    Create an account using your email and a
+                                    password. It only takes a minute to get
+                                    started.
+                                </p>
                             </div>
-                            <h5
-                                class="text-gray-900 mb-2 font-semibold leading-5"
-                            >
-                                Signup
-                            </h5>
-                            <p
-                                class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto"
-                            >
-                                Signup using your email and a password
-                            </p>
-                        </div>
-                        <div class="sm:text-center">
+
                             <div
-                                class="flex items-center justify-center w-24 h-24 mb-4 text-5xl font-extrabold rounded-full text-indigo-500 bg-indigo-100 sm:mx-auto"
+                                class="bg-white rounded-lg shadow-md p-8 text-center hover:shadow-lg transition-shadow duration-300"
                             >
-                                2
+                                <div
+                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 text-xl font-bold"
+                                >
+                                    2
+                                </div>
+                                <h3
+                                    class="mt-6 text-lg font-medium text-gray-900"
+                                >
+                                    Start adding people
+                                </h3>
+                                <p class="mt-2 text-base text-gray-600">
+                                    Add the people you want to remember and
+                                    choose who those people are connected to in
+                                    your network.
+                                </p>
                             </div>
-                            <h5
-                                class="text-gray-900 mb-2 font-semibold leading-5"
-                            >
-                                Start adding people
-                            </h5>
-                            <p
-                                class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto"
-                            >
-                                Add the people you want to remember and chose
-                                who those people are connected to
-                            </p>
-                        </div>
-                        <div class="sm:text-center">
+
                             <div
-                                class="flex items-center justify-center w-24 h-24 mb-4 text-5xl font-extrabold rounded-full text-indigo-500 bg-indigo-100 sm:mx-auto"
+                                class="bg-white rounded-lg shadow-md p-8 text-center hover:shadow-lg transition-shadow duration-300"
                             >
-                                3
+                                <div
+                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 text-indigo-600 text-xl font-bold"
+                                >
+                                    3
+                                </div>
+                                <h3
+                                    class="mt-6 text-lg font-medium text-gray-900"
+                                >
+                                    Start remembering
+                                </h3>
+                                <p class="mt-2 text-base text-gray-600">
+                                    Whenever you need to brush up on people's
+                                    names, just visit the website and explore
+                                    your personal network.
+                                </p>
                             </div>
-                            <h5
-                                class="text-gray-900 mb-2 font-semibold leading-5"
-                            >
-                                Start remembering
-                            </h5>
-                            <p
-                                class="max-w-md mb-3 text-sm text-gray-900 sm:mx-auto"
-                            >
-                                Whenever you need brush up on peoples names go
-                                to the website and brush up on peoples names
-                            </p>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <h6>Screenshot of a whole network</h6>
-                <img
-                    class="screenshot1"
-                    alt="Screenshot of a whole network"
-                    src="https://github.com/benna100/name-rememberer/blob/master/src/assets/screenshot.PNG?raw=true"
-                />
-                <h6>Screenshot of part of a network</h6>
-                <img
-                    class="screenshot2"
-                    alt="Screenshot of part of a network"
-                    src="https://github.com/benna100/name-rememberer/blob/master/src/assets/screenshot2.PNG?raw=true"
-                />
+            <!-- Screenshots Section -->
+            <section class="py-16">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2
+                        class="text-3xl font-bold text-center text-gray-900 sm:text-4xl mb-12"
+                    >
+                        See it in action
+                    </h2>
 
-                <a
-                    href="signup.html"
-                    class="get-started"
-                    id="get-started"
-                    draggable="false"
+                    <div
+                        class="grid grid-cols-1 lg:grid-cols-2 gap-8 screenshot-container"
+                    >
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                Complete network overview
+                            </h3>
+                            <img
+                                class="w-full rounded-lg"
+                                alt="Screenshot of a whole network"
+                                src="https://github.com/benna100/name-rememberer/blob/master/src/assets/screenshot.PNG?raw=true"
+                            />
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-4">
+                                Focused view of connections
+                            </h3>
+                            <img
+                                class="w-full rounded-lg"
+                                alt="Screenshot of part of a network"
+                                src="https://github.com/benna100/name-rememberer/blob/master/src/assets/screenshot2.PNG?raw=true"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="bg-indigo-600">
+                <div
+                    class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 lg:flex lg:items-center lg:justify-between"
                 >
-                    👉 Get started 👈
-                </a>
+                    <h2
+                        class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl"
+                    >
+                        <span class="block"
+                            >Ready to start remembering names?</span
+                        >
+                        <span class="block text-indigo-200"
+                            >Get started with NameName today.</span
+                        >
+                    </h2>
+                    <div class="mt-8 flex lg:mt-0 lg:flex-shrink-0">
+                        <div class="inline-flex rounded-md shadow">
+                            <a
+                                href="signup.html"
+                                class="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50"
+                            >
+                                Get started
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800">
+            <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+                <div
+                    class="mt-8 border-t border-gray-700 pt-8 md:flex md:items-center md:justify-between"
+                >
+                    <div class="flex space-x-6 md:order-2">
+                        <a href="#" class="text-gray-400 hover:text-gray-300">
+                            <span class="sr-only">Privacy Policy</span>
+                            Privacy
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-300">
+                            <span class="sr-only">Terms</span>
+                            Terms
+                        </a>
+                    </div>
+                    <p class="mt-8 text-base text-gray-400 md:mt-0 md:order-1">
+                        &copy; 2025 NameName. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
